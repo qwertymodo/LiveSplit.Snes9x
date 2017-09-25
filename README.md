@@ -6,6 +6,7 @@ LiveSplit.SuperMetroid is a [LiveSplit](http://livesplit.org/) component for Sup
 Features
 --------
 * Auto start/reset the game timer
+* Supports both real and in-game timers
 * Autosplits normal runs (requires you to set up your splits manually) 
 
 Planned Features
