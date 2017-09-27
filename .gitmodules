@@ -1,0 +1,4 @@
+[submodule "LiveSplit"]
+	path = LiveSplit
+	url = https://github.com/LiveSplit/LiveSplit.git
+	branch = master
