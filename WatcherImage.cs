@@ -11,6 +11,65 @@ using System.Threading.Tasks;
 
 namespace LiveSplit.SuperMetroid
 {
+    public class Comparator
+    {
+        public enum Type
+        {
+            EQUAL,
+            NOTEQUAL,
+            GREATER,
+            GREATEROREQUAL,
+            LESS,
+            LESSOREQUAL
+        }
+
+        public static Func<T, T, bool> GetComparator<T>(Type comparator) where T : IComparable
+        {
+            switch (comparator)
+            {
+                case Type.EQUAL:
+                    return (cur, tar) => cur.CompareTo(tar) == 0;
+
+                case Type.NOTEQUAL:
+                    return (cur, tar) => cur.CompareTo(tar) != 0;
+
+                case Type.GREATER:
+                    return (cur, tar) => cur.CompareTo(tar) > 0;
+
+                case Type.GREATEROREQUAL:
+                    return (cur, tar) => cur.CompareTo(tar) >= 0;
+
+                case Type.LESS:
+                    return (cur, tar) => cur.CompareTo(tar) < 0;
+
+                case Type.LESSOREQUAL:
+                    return (cur, tar) => cur.CompareTo(tar) <= 0;
+
+                default:
+                    return (cur, tar) => false;
+            }
+        }
+
+
+        public static Func<T, T, bool> TestFlag<T>(bool set = true) where T : struct, IComparable
+        {
+            if (typeof(T).IsEnum)
+            {
+                if (set)
+                    return (val, flag) => ((Enum)Enum.ToObject(val.GetType(), val)).HasFlag((Enum)Enum.ToObject(flag.GetType(), flag));
+
+                else
+                    return (val, flag) => !((Enum)Enum.ToObject(val.GetType(), val)).HasFlag((Enum)Enum.ToObject(flag.GetType(), flag));
+            }
+
+            else
+                return (val, flag) => false;
+        }
+    }
+    
+
+    
+
     class WatcherImage<T> where T : IComparable
     {
         protected string Name;
@@ -63,7 +122,7 @@ namespace LiveSplit.SuperMetroid
             DrawImageGrayscale(g, img, (gWidth - iWidth) / 2 + x, (gHeight - iHeight) / 2 - y, iWidth, iHeight, opacity);
         }
 
-        protected void Draw(Graphics g, int width, int height, bool active, float opacity = 0.5f)
+        protected virtual void Draw(Graphics g, int width, int height, bool active, float opacity = 0.5f)
         {
             if(active)
             {
@@ -99,28 +158,6 @@ namespace LiveSplit.SuperMetroid
         {
             Target = target;
         }
-    }
-
-    class EqualsWatcherImage<T> : ComparisonWatcherImage<T> where T : IComparable
-    {
-        public EqualsWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target)
-            : base(name, frames, x, y, center, height, width, target)
-        { }
-
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            Previous = Current;
-            Current = SuperMetroidComponent.game.Get<T>(Name);
-
-            Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && Current.CompareTo(Target) == 0);
-        }
-    }
-
-    class GreaterWatcherImage<T> : ComparisonWatcherImage<T> where T : IComparable
-    {
-        public GreaterWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target)
-            : base(name, frames, x, y, center, height, width, target)
-        { }
 
         public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
@@ -132,50 +169,21 @@ namespace LiveSplit.SuperMetroid
     }
 
 
-    class ByteBitSetWatcherImage : ComparisonWatcherImage<byte>
+    class BoolWatcherImage<T> : ComparisonWatcherImage<T> where T : struct, IComparable
     {
-        public ByteBitSetWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, byte mask)
-            : base(name, frames, x, y, center, height, width, mask)
-        { }
+        protected Func<T, T, bool> updateFunc;
 
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        public BoolWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target, Func<T, T, bool> func)
+            : base(name, frames, x, y, center, height, width, target)
         {
-            Previous = Current;
-            Current = SuperMetroidComponent.game.Get<byte>(Name);
-
-            Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && (Current & Target) == Target);
+            updateFunc = func;
         }
-    }
-
-
-    class ByteBitClearWatcherImage : ComparisonWatcherImage<byte>
-    {
-        public ByteBitClearWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, byte mask)
-            : base(name, frames, x, y, center, height, width, mask)
-        { }
 
         public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-            Previous = Current;
-            Current = SuperMetroidComponent.game.Get<byte>(Name);
+            base.Update(g, state, width, height, mode);
 
-            Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && (Current & Target) == 0);
-        }
-    }
-
-
-    class ShortBitSetWatcherImage : ComparisonWatcherImage<ushort>
-    {
-        public ShortBitSetWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, ushort mask)
-            : base(name, frames, x, y, center, height, width, mask)
-        { }
-
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            Previous = Current;
-            Current = SuperMetroidComponent.game.Get<ushort>(Name);
-
-            Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && (Current & Target) == Target);
+            Draw(g, (int)width, (int)height, updateFunc(Current, Target));
         }
     }
 }

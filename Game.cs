@@ -8,6 +8,69 @@ using System.Threading.Tasks;
 
 namespace LiveSplit.SuperMetroid
 {
+    [Flags]
+    enum Beams : ushort
+    {
+        Wave    = 0x0001,
+        Ice     = 0x0002,
+        Spazer  = 0x0004,
+        Plasma  = 0x0008,
+        Charge  = 0x1000
+    }
+
+    [Flags]
+    enum Items : ushort
+    {
+        VariaSuit       = 0x0001,
+        SpringBall      = 0x0002,
+        MorphBall       = 0x0004,
+        ScrewAttack     = 0x0008,
+        GravitySuit     = 0x0020,
+        HighJumpBoots   = 0x0100,
+        SpaceJump       = 0x0200,
+        Bombs           = 0x1000,
+        SpeedBooster    = 0x2000,
+        Grapple         = 0x4000,
+        XRay            = 0x8000
+    }
+
+    class Bosses
+    {
+        [Flags]
+        public enum Crateria : byte
+        {
+            BombTorizo      = 0x04
+        }
+
+        [Flags]
+        public enum Brinstar : byte
+        {
+            Kraid           = 0x01,
+            SporeSpawn      = 0x02
+        }
+
+        [Flags]
+        public enum Norfair : byte
+        {
+            Ridley          = 0x01,
+            Crocomire       = 0x02,
+            GoldenTorizo    = 0x04
+        }
+
+        [Flags]
+        public enum WreckedShip : byte
+        {
+            Phantoon        = 0x01
+        }
+
+        [Flags]
+        public enum Maridia : byte
+        {
+            Draygon         = 0x01,
+            Botwoon         = 0x02
+        }
+    }
+
     class Game
     {
         string GameName => "Super Metroid";
@@ -18,8 +81,8 @@ namespace LiveSplit.SuperMetroid
         {
             emulator.RegisterWatcher("Game State", typeof(ushort), Emulator.MemoryType.WRAM, 0x0998);
             emulator.RegisterWatcher("Room ID", typeof(ushort), Emulator.MemoryType.WRAM, 0x079B);
-            emulator.RegisterWatcher("Beams", typeof(ushort), Emulator.MemoryType.WRAM, 0x09A8);
-            emulator.RegisterWatcher("Items", typeof(ushort), Emulator.MemoryType.WRAM, 0x09A4);
+            emulator.RegisterWatcher("Beams", typeof(Beams), Emulator.MemoryType.WRAM, 0x09A8);
+            emulator.RegisterWatcher("Items", typeof(Items), Emulator.MemoryType.WRAM, 0x09A4);
             emulator.RegisterWatcher("Energy Tank", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C4);
             emulator.RegisterWatcher("Missiles", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C8);
             emulator.RegisterWatcher("Super Missiles", typeof(ushort), Emulator.MemoryType.WRAM, 0x09CC);
