@@ -162,9 +162,7 @@ namespace LiveSplit.SuperMetroid
         public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             Previous = Current;
-            Current = SuperMetroidComponent.game.Get<T>(Name);
-
-            Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && Current.CompareTo(Target) > 0);
+            Current = SuperMetroidComponent.game.IsLoaded() ? SuperMetroidComponent.game.Get<T>(Name) : default(T);
         }
     }
 

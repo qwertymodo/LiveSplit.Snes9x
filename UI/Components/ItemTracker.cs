@@ -39,47 +39,52 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         public IDictionary<string, Action> ContextMenuControls => null;
 
-        private void AddItem<T>(int x, int y, string name, Comparator.Type comparator, T target = default(T)) where T: struct, IComparable
+        private void AddGreaterItem<T>(string name, int x, int y, ushort compareTo = 0)
         {
             List<Image> images;
             itemIcons.TryGetValue(name, out images);
             if (images != null)
-                items.Add(name, new BoolWatcherImage<T>(name, images, x + 1, y + 1, false, 32, 32, target, Comparator.GetComparator<T>(comparator)));
+                items.Add(name, new GreaterWatcherImage<ushort>(name, images, x + 1, y + 1, false, 32, 32, compareTo));
         }
 
-        private void AddFlagItem<T>(int x, int y, string name, string field, T flag, bool set = true) where T : struct, IComparable
+        private void AddByteFlagItem(string name, string field, byte flag, int x, int y)
         {
             List<Image> images;
             itemIcons.TryGetValue(name, out images);
             if (images != null)
-                items.Add(name, new BoolWatcherImage<T>(field, images, x + 1, y + 1, false, 32, 32, flag, Comparator.TestFlag<T>(set)));
+                items.Add(name, new ByteBitSetWatcherImage(field, images, x + 1, y + 1, false, 32, 32, flag));
+        }
+
+        private void AddShortFlagItem(string name, string field, ushort flag, int x, int y)
+        {
+            List<Image> images;
+            itemIcons.TryGetValue(name, out images);
+            if (images != null)
+                items.Add(name, new ShortBitSetWatcherImage(field, images, x + 1, y + 1, false, 32, 32, flag));
         }
 
         public ItemTracker()
         {
-            AddItem<ushort>(0, 0, "Missiles", Comparator.Type.GREATER, 0);
-            AddItem<ushort>(32, 0, "Super Missiles", Comparator.Type.GREATER, 0);
-            AddItem<ushort>(64, 0, "Power Bombs", Comparator.Type.GREATER, 0);
-            AddFlagItem(96, 0, "Grapple Beam", "Items", Items.GravitySuit);
-            AddFlagItem(128, 0, "X-Ray Scope", "Items", Items.XRay);
-
-            AddFlagItem(0, 32, "Varia Suit", "Items", Items.VariaSuit);
-            AddFlagItem(32, 32, "Gravity Suit", "Items", Items.GravitySuit);
-            AddFlagItem(64, 32, "Morph Ball", "Items", Items.MorphBall);
-            AddFlagItem(96, 32, "Bombs", "Items", Items.Bombs);
-            AddFlagItem(128, 32, "Spring Ball", "Items", Items.SpringBall);
-
-            AddFlagItem(0, 64, "High Jump Boots", "Items", Items.HighJumpBoots);
-            AddFlagItem(32, 64, "Speed Booster", "Items", Items.SpeedBooster);
-            AddFlagItem(64, 64, "Space Jump", "Items", Items.SpaceJump);
-            AddFlagItem(96, 64, "Screw Attack", "Items", Items.ScrewAttack);
-            AddItem<ushort>(128, 64, "Reserve Tank", Comparator.Type.GREATER, 0);
-
-            AddFlagItem(0, 96, "Charge Beam", "Beams", Beams.Charge);
-            AddFlagItem(32, 96, "Spazer", "Beams", Beams.Spazer);
-            AddFlagItem(64, 96, "Ice Beam", "Beams", Beams.Ice);
-            AddFlagItem(96, 96, "Wave Beam", "Beams", Beams.Wave);
-            AddFlagItem(128, 96, "Plasma Beam", "Beams", Beams.Plasma);
+            AddGreaterItem<ushort>("Missiles", 0, 0);
+            AddGreaterItem<ushort>("Super Missiles", 32, 0);
+            AddGreaterItem<ushort>("Power Bombs", 64, 0);
+            AddShortFlagItem("Grapple Beam", "Items", 0x4000, 96, 0);
+            AddShortFlagItem("X-Ray Scope", "Items", 0x8000, 128, 0);
+            AddShortFlagItem("Varia Suit", "Items", 0x0001, 0, 32);
+            AddShortFlagItem("Gravity Suit", "Items", 0x0020, 32, 32);
+            AddShortFlagItem("Morph Ball", "Items", 0x0004, 64, 32);
+            AddShortFlagItem("Bombs", "Items", 0x1000, 96, 32);
+            AddShortFlagItem("Spring Ball", "Items", 0x0002, 128, 32);
+            AddShortFlagItem("High Jump Boots", "Items", 0x0100, 0, 64);
+            AddShortFlagItem("Speed Booster", "Items", 0x2000, 32, 64);
+            AddShortFlagItem("Space Jump", "Items", 0x0200, 64, 64);
+            AddShortFlagItem("Screw Attack", "Items", 0x0008, 96, 64);
+            AddGreaterItem<ushort>("Reserve Tank", 128, 64);
+            AddShortFlagItem("Charge Beam", "Beams", 0x1000, 0, 96);
+            AddShortFlagItem("Spazer", "Beams", 0x0004, 32, 96);
+            AddShortFlagItem("Ice Beam", "Beams", 0x0002, 64, 96);
+            AddShortFlagItem("Wave Beam", "Beams", 0x0001, 96, 96);
+            AddShortFlagItem("Plasma Beam", "Beams", 0x0008, 128, 96);
         }
 
         public void Dispose()

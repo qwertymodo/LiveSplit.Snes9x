@@ -39,7 +39,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         public IDictionary<string, Action> ContextMenuControls => null;
 
-        class BossHealthWatcherImage : ComparisonWatcherImage<ushort>
+        class BossHealthWatcherImage : GreaterWatcherImage<ushort>
         {
             public BossHealthWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, ushort segment)
                 : base(name, frames, x, y, center, height, width, segment)
@@ -49,36 +49,41 @@ namespace LiveSplit.SuperMetroid.UI.Components
         }
 
 
-        class BossWatcherImage<T> : BoolWatcherImage<T> where T : struct, IComparable
+        class BossWatcherImage : ByteBitClearWatcherImage
         {
-            public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T flag)
-            : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))
+            public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, byte mask)
+            : base(name, frames, x, y, center, height, width, mask)
             { }
 
             public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
             {
-                base.Update(g, state, width, height, mode);
+                Previous = Current;
+                Current = SuperMetroidComponent.game.Get<byte>(Name);
 
-                Draw(g, (int)width, (int)height, updateFunc(Current, Target), 1);
+                Draw(g, (int)width, (int)height, SuperMetroidComponent.game.IsLoaded() && (Current & Target) == 0, 1);
             }
-        }
-
-
-        private void AddBoss<T>(int x, int y, int height, int width, string name, int idx, T flag) where T : struct, IComparable
-        {
-            List<Image> images;
-            bossImages.TryGetValue(name, out images);
-            if (images != null)
-                bosses.Add(name, new BossWatcherImage<T>("Bosses[" + idx + "]", images, x, y, true, height, width, flag));
         }
 
 
         public BossTracker()
         {
-            AddBoss(-16, -24, 96, 96, "Kraid", 1, Bosses.Brinstar.Kraid);
-            AddBoss(16, -24, 96, 96, "Draygon", 4, Bosses.Maridia.Draygon);
-            AddBoss(-4, -20, 72, 72, "Phantoon", 3, Bosses.WreckedShip.Phantoon);
-            AddBoss(12, 28, 88, 88, "Ridley", 2, Bosses.Norfair.Ridley);
+            List<Image> images;
+
+            bossImages.TryGetValue("Kraid", out images);
+            if (images?.Any() ?? false)
+                bosses.Add("Kraid", new BossWatcherImage("Bosses[1]", images, -16, -24, true, 96, 96, 0x01));
+
+            bossImages.TryGetValue("Draygon", out images);
+            if (images?.Any() ?? false)
+                bosses.Add("Draygon", new BossWatcherImage("Bosses[4]", images, 16, -24, true, 96, 96, 0x01));
+
+            bossImages.TryGetValue("Phantoon", out images);
+            if (images?.Any() ?? false)
+                bosses.Add("Phantoon", new BossWatcherImage("Bosses[3]", images, -4, -20, true, 72, 72, 0x01));
+
+            bossImages.TryGetValue("Ridley", out images);
+            if (images?.Any() ?? false)
+                bosses.Add("Ridley", new BossWatcherImage("Bosses[2]", images, 12, 28, true, 88, 88, 0x01));
         }
 
         public void Dispose()
