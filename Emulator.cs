@@ -76,7 +76,7 @@ namespace LiveSplit.SuperMetroid
 
         internal EmulatorOffsets GetOffsets()
         {
-            if (emulatorProcess?.HasExited == true)
+            if (emulatorProcess?.HasExited ?? true)
             {
                 emulatorProcess = null;
                 emulatorOffsets = null;
@@ -90,7 +90,7 @@ namespace LiveSplit.SuperMetroid
                     foreach (var process in offsets)
                     {
                         emulatorProcess = Process.GetProcessesByName(process.Key).FirstOrDefault();
-                        if (!emulatorProcess?.HasExited == true)
+                        if (!(emulatorProcess?.HasExited ?? true))
                         {
                             var version = emulatorProcess.MainModuleWow64Safe().FileVersionInfo;
                             foreach (var offset in process.Value)
