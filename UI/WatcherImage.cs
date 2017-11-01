@@ -5,11 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace LiveSplit.SuperMetroid
+namespace LiveSplit.SuperMetroid.UI
 {
     public class Comparator
     {
@@ -182,6 +179,59 @@ namespace LiveSplit.SuperMetroid
             base.Update(g, state, width, height, mode);
 
             Draw(g, (int)width, (int)height, updateFunc(Current, Target));
+        }
+    }
+
+
+    class IndexWatcherImage<T> : ComparisonWatcherImage<T> where T : struct, IComparable
+    {
+        List<T> Targets = new List<T>();
+        protected Func<T, T, bool> updateFunc;
+
+        public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets)
+            : base(name, frames, x, y, center, height, width, default(T))
+        {
+            updateFunc = Comparator.GetComparator<T>(Comparator.Type.EQUAL);
+        }
+
+        public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets, Func<T, T, bool> func)
+            : base(name, frames, x, y, center, height, width, default(T))
+        {
+            updateFunc = func;
+        }
+        
+        protected virtual void Draw(Graphics g, int width, int height, int index, float opacity = 0.5f)
+        {
+            if (index >= Frames.Count)
+                index = Frames.Count - 1;
+
+            if (index < 0)
+                Draw(g, width, height, false, opacity);
+
+            else
+            {
+                if (Centered)
+                    DrawImageFromCenter(g, Frames[index], X, Y, Width, Height, width, height);
+
+                else
+                    g.DrawImage(Frames[index], X, Y, Width, Height);
+            }
+        }
+
+        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        {
+            base.Update(g, state, width, height, mode);
+
+            for(int i = Targets.Count - 1; i >= 0; --i)
+            {
+                if(updateFunc(Current, Targets[i]))
+                {
+                    Draw(g, (int)width, (int)height, i);
+                    return;
+                }
+            }
+
+            Draw(g, (int)width, (int)height, false);
         }
     }
 }

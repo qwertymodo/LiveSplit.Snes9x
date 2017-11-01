@@ -3,11 +3,8 @@ using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace LiveSplit.SuperMetroid.UI.Components
 {

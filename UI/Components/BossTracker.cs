@@ -1,15 +1,11 @@
-﻿using LiveSplit.UI.Components;
+﻿using LiveSplit.Model;
+using LiveSplit.UI;
+using LiveSplit.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LiveSplit.Model;
-using LiveSplit.UI;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
 
 namespace LiveSplit.SuperMetroid.UI.Components
