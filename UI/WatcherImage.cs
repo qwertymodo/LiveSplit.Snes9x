@@ -191,12 +191,14 @@ namespace LiveSplit.SuperMetroid.UI
         public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets)
             : base(name, frames, x, y, center, height, width, default(T))
         {
+            Targets = targets;
             updateFunc = Comparator.GetComparator<T>(Comparator.Type.EQUAL);
         }
 
         public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets, Func<T, T, bool> func)
             : base(name, frames, x, y, center, height, width, default(T))
         {
+            Targets = targets;
             updateFunc = func;
         }
         

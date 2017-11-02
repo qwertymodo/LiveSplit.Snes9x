@@ -39,7 +39,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
             InternalComponent = new ComponentRendererComponent();
             var components = new List<IComponent>();
             components.Add(new ItemTracker());
-            components.Add(new BossTracker());
+            //components.Add(new BossTracker());
             InternalComponent.VisibleComponents = components;
         }
 

@@ -79,11 +79,11 @@ namespace LiveSplit.SuperMetroid
             emulator.RegisterWatcher("Room ID", typeof(ushort), Emulator.MemoryType.WRAM, 0x079B);
             emulator.RegisterWatcher("Beams", typeof(Beams), Emulator.MemoryType.WRAM, 0x09A8);
             emulator.RegisterWatcher("Items", typeof(Items), Emulator.MemoryType.WRAM, 0x09A4);
-            emulator.RegisterWatcher("Energy Tank", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C4);
-            emulator.RegisterWatcher("Missiles", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C8);
-            emulator.RegisterWatcher("Super Missiles", typeof(ushort), Emulator.MemoryType.WRAM, 0x09CC);
-            emulator.RegisterWatcher("Power Bombs", typeof(ushort), Emulator.MemoryType.WRAM, 0x09D0);
-            emulator.RegisterWatcher("Reserve Tank", typeof(ushort), Emulator.MemoryType.WRAM, 0x09D4);
+            emulator.RegisterWatcher("Health", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C4);
+            emulator.RegisterWatcher("Missile Count", typeof(ushort), Emulator.MemoryType.WRAM, 0x09C8);
+            emulator.RegisterWatcher("Super Missile Count", typeof(ushort), Emulator.MemoryType.WRAM, 0x09CC);
+            emulator.RegisterWatcher("Power Bomb Count", typeof(ushort), Emulator.MemoryType.WRAM, 0x09D0);
+            emulator.RegisterWatcher("Reserve Health", typeof(ushort), Emulator.MemoryType.WRAM, 0x09D4);
 
             for (int i = 0; i < 20; ++i)
                 emulator.RegisterWatcher("Pickups[" + i + "]", typeof(byte), Emulator.MemoryType.WRAM, 0xD870 + i);
@@ -105,15 +105,21 @@ namespace LiveSplit.SuperMetroid
             if (!emulator.IsRunning())
                 return false;
 
-            ROMName = new DeepPointer(emulator.GetOffsets().ROM, 0x7FC0);
-            string name;
-            ROMName.DerefString(emulator.emulatorProcess, 21, out name);
-            if (name != null && name.StartsWith(GameName))
+            try
             {
-                ushort state = Get<ushort>("Game State");
-                if (state < 0x0100 && state > 0x05)
-                    return true;
+                ROMName = new DeepPointer(emulator.GetOffsets().ROM, 0x7FC0);
+                string name;
+                ROMName.DerefString(emulator.emulatorProcess, 21, out name);
+                if (name != null && name.StartsWith(GameName))
+                {
+                    ushort state = Get<ushort>("Game State");
+                    if (state < 0x0100 && state > 0x05)
+                        return true;
+                }
             }
+
+            catch (Exception)
+            { }
 
             return false;
         }
