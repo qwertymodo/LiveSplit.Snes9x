@@ -52,9 +52,9 @@ namespace LiveSplit.SuperMetroid.UI.Components
             : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))
             { }
 
-            public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+            public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
             {
-                base.Update(g, state, width, height, mode);
+                base.Draw(g, state, width, height, mode);
 
                 Draw(g, (int)width, (int)height, updateFunc(Current, Target), 1);
             }

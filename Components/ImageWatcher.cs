@@ -139,7 +139,7 @@ namespace LiveSplit.Snes9x
             }
         }
 
-        public virtual void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        public virtual void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         { }
     }
 
@@ -155,7 +155,10 @@ namespace LiveSplit.Snes9x
             Target = target;
         }
 
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        { }
+
+        protected virtual void Update()
         {
             Previous = Current;
             Current = GameLoader.game.IsRunning() ? GameLoader.game.Get<T>(Name) : default(T);
@@ -173,9 +176,9 @@ namespace LiveSplit.Snes9x
             updateFunc = func;
         }
 
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-            base.Update(g, state, width, height, mode);
+            Update();
 
             Draw(g, (int)width, (int)height, updateFunc(Current, Target));
         }
@@ -219,9 +222,9 @@ namespace LiveSplit.Snes9x
             }
         }
 
-        public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+        public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-            base.Update(g, state, width, height, mode);
+            Update();
 
             for(int i = Targets.Count - 1; i >= 0; --i)
             {

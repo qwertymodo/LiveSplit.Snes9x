@@ -11,13 +11,6 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 {
     class ALinkToThePast : Game
     {
-        [Flags]
-        public enum BoolFlag : byte
-        {
-            FALSE   = 0x00,
-            TRUE    = 0x01,
-        }
-
         public enum Progress : byte
         {
             START   = 0x00,

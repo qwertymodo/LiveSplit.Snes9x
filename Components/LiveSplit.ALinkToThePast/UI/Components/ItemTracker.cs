@@ -1,120 +1,22 @@
-﻿using LiveSplit.Model;
-using LiveSplit.Snes9x;
-using LiveSplit.UI;
-using LiveSplit.UI.Components;
-using System;
+﻿using LiveSplit.Snes9x;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
 using static LiveSplit.ALinkToThePast.UI.Components.ALinkToThePast;
 
 namespace LiveSplit.ALinkToThePast.UI.Components
 {
-    class ItemTracker : IComponent
+    class ItemTracker : Snes9x.ItemTracker
     {
-        private Images itemIcons = new Images();
-        private Dictionary<string, dynamic> items = new Dictionary<string, dynamic>();
+        public override string ComponentName => "A Link to the Past Item Tracker";
 
-        public string ComponentName => "A Link to the Past Item Tracker";
+        public override float MinimumHeight => 336;
 
-        public float HorizontalWidth { get; set; }
-
-        public float MinimumHeight => 336;
-
-        public float VerticalHeight { get; set; }
-
-        public float MinimumWidth => 360;
-
-        public float PaddingTop => 0f;
-
-        public float PaddingBottom => 0f;
-
-        public float PaddingLeft => 0f;
-
-        public float PaddingRight => 0f;
-
-        public IDictionary<string, Action> ContextMenuControls => null;
-
-
-        private void AddItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, T target = default(T)) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new BoolImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, target, Comparator.GetComparator<T>(comparator)));
-        }
-
-
-        private void AddFlagItem<T>(int x, int y, int scale, string name, string field, T flag, bool set = true) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new BoolImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, flag, Comparator.TestFlag<T>(set)));
-        }
-
-
-        private void AddFlagItem(int x, int y, int scale, string name, bool set = true)
-        {
-            AddFlagItem(x, y, scale, name, name, BoolFlag.TRUE, set);
-        }
-
-
-        private void AddIndexItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, List<T> targets) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
-        }
-
-
-        private void AddIndexItem<T>(int x, int y, int scale, string name, string icon, Comparator.Type comparator, List<T> targets) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(icon, out images);
-            if (images != null)
-                items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
-        }
-
-
-        private void AddFlagIndexItem<T>(int x, int y, int scale, string name, string field, List<T> targets, bool set = true) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new IndexImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.TestFlag<T>(set)));
-        }
-
-
-        private void AddCounter(int x, int y, int scale, int digits, string name)
-        {
-            List<Image> images;
-            itemIcons.TryGetValue("HUD Digits", out images);
-            for (int i = digits; i > 0; --i)
-            {
-                int digit = i;
-                items.Add(name + "[" + i + "]", new IndexImageWatcher<ushort>(name, images, x + ((digits - i) * images[0].Width * scale) + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, new List<ushort> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (cur, tar) => {
-                    ushort pow = (ushort)(digit - 1);
-                    ushort div = (ushort)Math.Pow(10, pow);
-
-                    if (div > 0)
-                        cur /= div;
-
-                    cur %= 10;
-                    return cur == tar;
-                }
-                ));
-            }
-        }
-
+        public override float MinimumWidth => 360;
 
         public ItemTracker()
         {
-            AddCounter(16, 296, 3, 4, "Rupees");
+            icons = new Images();
+
+            AddCounter(16, 296, 3, 4, "Rupees", "HUD Digits");
 
             //AddIndexItem(16, 16, 3, "Bow", Comparator.Type.EQUAL, new List<BowLevel> { BowLevel.BOW, BowLevel.ARROW, BowLevel.SILVER });
             AddFlagIndexItem(16, 16, 3, "Bow", "Swappable Inventory 2", new List<SwappableInventory2> { SwappableInventory2.BOW, SwappableInventory2.SILVERARROW, (SwappableInventory2.BOW | SwappableInventory2.SILVERARROW) });
@@ -154,57 +56,6 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddIndexItem(72, 240, 3, "Gloves", Comparator.Type.EQUAL, new List<GlovesLevel> { GlovesLevel.POWER, GlovesLevel.TITAN });
             AddFlagItem(128, 240, 3, "Flippers");
             AddFlagItem(184, 240, 3, "Moon Pearl");
-        }
-
-        public void Dispose()
-        {
-        }
-
-        private void DrawGeneral(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            g.PixelOffsetMode = PixelOffsetMode.Half;
-            g.FillRectangle(new SolidBrush(Color.Black), 0, 0, width, height);
-
-            foreach (var item in items)
-            {
-                item.Value.GetType().GetMethod("Update")?.Invoke(item.Value, new object[] { g, state, width, height, mode });
-            }
-        }
-
-        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
-        {
-            if (HorizontalWidth < MinimumWidth)
-                HorizontalWidth = MinimumWidth;
-
-            DrawGeneral(g, state, HorizontalWidth, height, LayoutMode.Horizontal);
-        }
-
-        public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
-        {
-            if (VerticalHeight < MinimumHeight)
-                VerticalHeight = MinimumHeight;
-
-            DrawGeneral(g, state, width, VerticalHeight, LayoutMode.Vertical);
-        }
-
-        public XmlNode GetSettings(XmlDocument document)
-        {
-            return document.CreateElement("x");
-        }
-
-        public Control GetSettingsControl(LayoutMode mode)
-        {
-            return null;
-        }
-
-        public void SetSettings(XmlNode settings)
-        {
-        }
-
-        public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            invalidator?.Invalidate(0, 0, width, height);
         }
     }
 }

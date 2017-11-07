@@ -60,6 +60,9 @@
     <Compile Include="..\ImageWatcher.cs">
       <Link>ImageWatcher.cs</Link>
     </Compile>
+    <Compile Include="..\ItemTracker.cs">
+      <Link>ItemTracker.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Components\ALinkToThePast.cs" />
     <Compile Include="UI\Components\ALinkToThePastComponent.cs" />

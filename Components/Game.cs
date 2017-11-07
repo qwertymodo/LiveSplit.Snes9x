@@ -18,6 +18,13 @@ namespace LiveSplit.Snes9x
 
         protected DeepPointer romName;
 
+        [Flags]
+        public enum BoolFlag : byte
+        {
+            FALSE = 0x00,
+            TRUE = 0x01,
+        }
+
         public T Get<T>(string name) where T : struct, IComparable
         {
             if (emulator.GetWatcher(name) == null)

@@ -1,41 +1,19 @@
 ﻿using LiveSplit.Model;
 using LiveSplit.Snes9x;
 using LiveSplit.UI;
-using LiveSplit.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using System.Xml;
 
 namespace LiveSplit.SuperMetroid.UI.Components
 {
-    class ItemTracker : IComponent
+    class ItemTracker : Snes9x.ItemTracker
     {
-        private Images itemIcons = new Images();
-        private Dictionary<string, dynamic> items = new Dictionary<string, dynamic>();
+        public override string ComponentName => "Super Metroid Item Tracker";
 
-        public string ComponentName => "Super Metroid Item Tracker";
+        public override float MinimumHeight => 336;
 
-        public float HorizontalWidth { get; set; }
-
-        public float MinimumHeight => 336;
-
-        public float VerticalHeight { get; set; }
-
-        public float MinimumWidth => 320;
-
-        public float PaddingTop => 0f;
-
-        public float PaddingBottom => 0f;
-
-        public float PaddingLeft => 0f;
-
-        public float PaddingRight => 0f;
-
-        public IDictionary<string, Action> ContextMenuControls => null;
-
+        public override float MinimumWidth => 320;
 
         class BossWatcherImage<T> : BoolImageWatcher<T> where T : struct, IComparable
         {
@@ -43,68 +21,17 @@ namespace LiveSplit.SuperMetroid.UI.Components
             : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))
             { }
 
-            public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+            public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
             {
-                base.Update(g, state, width, height, mode);
+                base.Draw(g, state, width, height, mode);
 
                 Draw(g, (int)width, (int)height, updateFunc(Current, Target), 1);
             }
         }
 
-
-        private void AddItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, T target = default(T)) where T: struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new BoolImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, target, Comparator.GetComparator<T>(comparator)));
-        }
-
-
-        private void AddFlagItem<T>(int x, int y, int scale, string name, string field, T flag, bool set = true) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new BoolImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, flag, Comparator.TestFlag<T>(set)));
-        }
-
-
-        private void AddIndexItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, List<T> targets) where T : struct, IComparable
-        {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
-            if (images != null)
-                items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
-        }
-
-
-        private void AddCounter(int x, int y, int scale, int digits, string name)
-        {
-            List<Image> images;
-            itemIcons.TryGetValue("HUD Digits", out images);
-            for (int i = digits; i > 0; --i)
-            {
-                int digit = i;
-                items.Add(name + "[" + i + "]", new IndexImageWatcher<ushort>(name, images, x + ((digits - i) * images[0].Width * scale) + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, new List<ushort> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (cur, tar) => {
-                    ushort pow = (ushort)(digit - 1);
-                    ushort div = (ushort)Math.Pow(10, pow);
-
-                    if (div > 0)
-                        cur /= div;
-
-                    cur %= 10;
-                    return cur == tar;
-                }
-                ));
-            }
-        }
-
-
         private void AddBoss<T>(int x, int y, int height, int width, string name, int idx, T flag) where T : struct, IComparable
         {
-            List<Image> images;
-            itemIcons.TryGetValue(name, out images);
+            List<Image> images = icons[name];
             if (images != null)
                 items.Add(name, new BossWatcherImage<T>("Bosses[" + idx + "]", images, x + 1, y + 1, false, height, width, flag));
         }
@@ -112,13 +39,15 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         public ItemTracker()
         {
+            icons = new Images();
+
             AddIndexItem(16, 16, 4, "Missile Count", Comparator.Type.GREATEROREQUAL, new List<ushort> { 0, 1 });
             AddIndexItem(136, 16, 4, "Super Missile Count", Comparator.Type.GREATEROREQUAL, new List<ushort> { 0, 1 });
             AddIndexItem(224, 16, 4, "Power Bomb Count", Comparator.Type.GREATEROREQUAL, new List<ushort> { 0, 1 });
 
-            AddCounter(28, 80, 3, 3, "Missile Count");
-            AddCounter(144, 80, 3, 2, "Super Missile Count");
-            AddCounter(232, 80, 3, 2, "Power Bomb Count");
+            AddCounter(28, 80, 3, 3, "Missile Count", "HUD Digits");
+            AddCounter(144, 80, 3, 2, "Super Missile Count", "HUD Digits");
+            AddCounter(232, 80, 3, 2, "Power Bomb Count", "HUD Digits");
 
             AddFlagItem(16, 104, 3, "Charge Beam", "Beams", Beams.Charge);
             AddFlagItem(72, 104, 3, "Spazer", "Beams", Beams.Spazer);
@@ -144,57 +73,6 @@ namespace LiveSplit.SuperMetroid.UI.Components
             AddBoss(32, 264, 96, 96, "Draygon", 4, Bosses.Maridia.Draygon);
             AddBoss(32, 272, 72, 72, "Phantoon", 3, Bosses.WreckedShip.Phantoon);
             AddBoss(32, 216, 88, 88, "Ridley", 2, Bosses.Norfair.Ridley);
-        }
-
-        public void Dispose()
-        {
-        }
-
-        private void DrawGeneral(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            g.PixelOffsetMode = PixelOffsetMode.Half;
-            g.FillRectangle(new SolidBrush(Color.Black), 0, 0, width, height);
-
-            foreach(var item in items)
-            {
-                item.Value.GetType().GetMethod("Update")?.Invoke(item.Value, new object[] { g, state, width, height, mode });
-            }
-        }
-
-        public void DrawHorizontal(Graphics g, LiveSplitState state, float height, Region clipRegion)
-        {
-            if (HorizontalWidth < MinimumWidth)
-                HorizontalWidth = MinimumWidth;
-
-            DrawGeneral(g, state, HorizontalWidth, height, LayoutMode.Horizontal);
-        }
-
-        public void DrawVertical(Graphics g, LiveSplitState state, float width, Region clipRegion)
-        {
-            if (VerticalHeight < MinimumHeight)
-                VerticalHeight = MinimumHeight;
-
-            DrawGeneral(g, state, width, VerticalHeight, LayoutMode.Vertical);
-        }
-
-        public XmlNode GetSettings(XmlDocument document)
-        {
-            return document.CreateElement("x");
-        }
-
-        public Control GetSettingsControl(LayoutMode mode)
-        {
-            return null;
-        }
-
-        public void SetSettings(XmlNode settings)
-        {
-        }
-
-        public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
-        {
-            invalidator?.Invalidate(0, 0, width, height);
         }
     }
 }
