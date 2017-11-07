@@ -1,12 +1,11 @@
 ﻿using LiveSplit.Model;
-using LiveSplit.SuperMetroid.UI.Components;
 using LiveSplit.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace LiveSplit.SuperMetroid.UI
+namespace LiveSplit.Snes9x
 {
     public class Comparator
     {
@@ -67,7 +66,7 @@ namespace LiveSplit.SuperMetroid.UI
 
     
 
-    class WatcherImage<T> where T : IComparable
+    class ImageWatcher<T> where T : IComparable
     {
         protected string Name;
         protected List<Image> Frames;
@@ -77,10 +76,10 @@ namespace LiveSplit.SuperMetroid.UI
         protected int Height = 0;
         protected int Width = 0;
 
-        public WatcherImage()
+        public ImageWatcher()
         { }
 
-        public WatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width)
+        public ImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width)
         {
             Name = name;
             Frames = frames;
@@ -144,13 +143,13 @@ namespace LiveSplit.SuperMetroid.UI
         { }
     }
 
-    class ComparisonWatcherImage<T> : WatcherImage<T> where T : IComparable
+    class ComparisonImageWatcher<T> : ImageWatcher<T> where T : struct, IComparable
     {
         protected T Target;
         protected T Current;
         protected T Previous;
 
-        public ComparisonWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target)
+        public ComparisonImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target)
             : base(name, frames, x, y, center, height, width)
         {
             Target = target;
@@ -159,16 +158,16 @@ namespace LiveSplit.SuperMetroid.UI
         public override void Update(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             Previous = Current;
-            Current = SuperMetroidComponent.game.IsLoaded() ? SuperMetroidComponent.game.Get<T>(Name) : default(T);
+            Current = GameLoader.game.IsRunning() ? GameLoader.game.Get<T>(Name) : default(T);
         }
     }
 
 
-    class BoolWatcherImage<T> : ComparisonWatcherImage<T> where T : struct, IComparable
+    class BoolImageWatcher<T> : ComparisonImageWatcher<T> where T : struct, IComparable
     {
         protected Func<T, T, bool> updateFunc;
 
-        public BoolWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target, Func<T, T, bool> func)
+        public BoolImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target, Func<T, T, bool> func)
             : base(name, frames, x, y, center, height, width, target)
         {
             updateFunc = func;
@@ -183,19 +182,19 @@ namespace LiveSplit.SuperMetroid.UI
     }
 
 
-    class IndexWatcherImage<T> : ComparisonWatcherImage<T> where T : struct, IComparable
+    class IndexImageWatcher<T> : ComparisonImageWatcher<T> where T : struct, IComparable
     {
         List<T> Targets = new List<T>();
         protected Func<T, T, bool> updateFunc;
 
-        public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets)
+        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets)
             : base(name, frames, x, y, center, height, width, default(T))
         {
             Targets = targets;
             updateFunc = Comparator.GetComparator<T>(Comparator.Type.EQUAL);
         }
 
-        public IndexWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets, Func<T, T, bool> func)
+        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets, Func<T, T, bool> func)
             : base(name, frames, x, y, center, height, width, default(T))
         {
             Targets = targets;

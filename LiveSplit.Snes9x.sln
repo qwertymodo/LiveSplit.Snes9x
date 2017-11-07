@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.SuperMetroid", "LiveSplit.SuperMetroid.csproj", "{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E8047F95-BA79-4E2E-A9BB-5C48D5FA2467} = {E8047F95-BA79-4E2E-A9BB-5C48D5FA2467}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.Core", "LiveSplit\LiveSplit\LiveSplit.Core\LiveSplit.Core.csproj", "{6DE847DB-20A3-4848-AEEE-1B4364AECDFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateManager", "LiveSplit\LiveSplit\UpdateManager\UpdateManager.csproj", "{56DEA3A0-2EB7-493B-B50F-A5E3AA8AE52A}"
@@ -88,6 +83,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.DetailedTimer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.Timer", "LiveSplit\LiveSplit\Components\LiveSplit.Timer\LiveSplit.Timer.csproj", "{B9045699-7AC0-4B1C-B6A7-0EB4A93C48D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.SuperMetroid", "Components\LiveSplit.SuperMetroid\LiveSplit.SuperMetroid.csproj", "{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveSplit.ALinkToThePast", "Components\LiveSplit.ALinkToThePast\LiveSplit.ALinkToThePast.csproj", "{91DC3564-C445-4EC0-BF12-C5DF420FC26E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug with API Calls|Any CPU = Debug with API Calls|Any CPU
@@ -96,14 +95,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug with API Calls|Any CPU.ActiveCfg = Debug|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug with API Calls|Any CPU.Build.0 = Debug|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release Candidate|Any CPU.ActiveCfg = Release|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release Candidate|Any CPU.Build.0 = Release|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6DE847DB-20A3-4848-AEEE-1B4364AECDFB}.Debug with API Calls|Any CPU.ActiveCfg = Debug|Any CPU
 		{6DE847DB-20A3-4848-AEEE-1B4364AECDFB}.Debug with API Calls|Any CPU.Build.0 = Debug|Any CPU
 		{6DE847DB-20A3-4848-AEEE-1B4364AECDFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -352,6 +343,22 @@ Global
 		{B9045699-7AC0-4B1C-B6A7-0EB4A93C48D7}.Release Candidate|Any CPU.Build.0 = Release Candidate|Any CPU
 		{B9045699-7AC0-4B1C-B6A7-0EB4A93C48D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9045699-7AC0-4B1C-B6A7-0EB4A93C48D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug with API Calls|Any CPU.ActiveCfg = Debug|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug with API Calls|Any CPU.Build.0 = Debug|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release Candidate|Any CPU.ActiveCfg = Release|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release Candidate|Any CPU.Build.0 = Release|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C761BE40-CA79-4CA7-93BE-0C56E3F18FC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Debug with API Calls|Any CPU.ActiveCfg = Debug|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Debug with API Calls|Any CPU.Build.0 = Debug|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Release Candidate|Any CPU.ActiveCfg = Release|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Release Candidate|Any CPU.Build.0 = Release|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91DC3564-C445-4EC0-BF12-C5DF420FC26E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace LiveSplit.SuperMetroid
+namespace LiveSplit.Snes9x
 {
-    class Emulator
+    class emulator
     {
         public enum MemoryType { ROM, WRAM, SRAM };
         private LiveSplitState currentState;
@@ -37,14 +37,14 @@ namespace LiveSplit.SuperMetroid
         {
             new EmulatorOffsets { Process = "snes9x", Version = "1.53", WRAM = 0x2EFBA4, ROM = 0x2EFBA8, SRAM = 0x2EFBAC },
             new EmulatorOffsets { Process = "snes9x", Version = "1.54.1", WRAM = 0x3410D4, ROM = 0x3410D8, SRAM = 0x3410DC },
-            new EmulatorOffsets { Process = "snes9x", Version = "1.55", WRAM = 0x35CFD4, ROM = 0x35CFD8, SRAM = 0x35CFDC },
+            new EmulatorOffsets { Process = "snes9x", Version = "1.55", WRAM = 0x35BFD4, ROM = 0x35BFD8, SRAM = 0x35BFDC },
             new EmulatorOffsets { Process = "snes9x-x64", Version = "1.53", WRAM = 0x405EC8, ROM = 0x405ED0, SRAM = 0x405ED8 },
             new EmulatorOffsets { Process = "snes9x-x64", Version  ="1.54.1", WRAM = 0x4DAF18, ROM = 0x4DAF20, SRAM = 0x4DAF28 }
         }.GroupBy(x => x.Process).ToDictionary(x => x.Key, x => x.ToList());
 
         private Dictionary<string, MemoryWatcher> watchers = new Dictionary<string, MemoryWatcher>();
 
-        public Emulator()
+        public emulator()
         {
 
         }

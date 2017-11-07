@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.Snes9x;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
@@ -36,7 +37,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
         public IDictionary<string, Action> ContextMenuControls => null;
 
 
-        class BossWatcherImage<T> : BoolWatcherImage<T> where T : struct, IComparable
+        class BossWatcherImage<T> : BoolImageWatcher<T> where T : struct, IComparable
         {
             public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T flag)
             : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))
@@ -56,7 +57,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
             List<Image> images;
             itemIcons.TryGetValue(name, out images);
             if (images != null)
-                items.Add(name, new BoolWatcherImage<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, target, Comparator.GetComparator<T>(comparator)));
+                items.Add(name, new BoolImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, target, Comparator.GetComparator<T>(comparator)));
         }
 
 
@@ -65,7 +66,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
             List<Image> images;
             itemIcons.TryGetValue(name, out images);
             if (images != null)
-                items.Add(name, new BoolWatcherImage<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, flag, Comparator.TestFlag<T>(set)));
+                items.Add(name, new BoolImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, flag, Comparator.TestFlag<T>(set)));
         }
 
 
@@ -74,7 +75,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
             List<Image> images;
             itemIcons.TryGetValue(name, out images);
             if (images != null)
-                items.Add(name, new IndexWatcherImage<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
+                items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
         }
 
 
@@ -85,7 +86,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
             for (int i = digits; i > 0; --i)
             {
                 int digit = i;
-                items.Add(name + "[" + i + "]", new IndexWatcherImage<ushort>(name, images, x + ((digits - i) * images[0].Width * scale) + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, new List<ushort> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (cur, tar) => {
+                items.Add(name + "[" + i + "]", new IndexImageWatcher<ushort>(name, images, x + ((digits - i) * images[0].Width * scale) + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, new List<ushort> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, (cur, tar) => {
                     ushort pow = (ushort)(digit - 1);
                     ushort div = (ushort)Math.Pow(10, pow);
 

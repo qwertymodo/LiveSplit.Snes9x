@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.Snes9x;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
@@ -35,7 +36,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         public IDictionary<string, Action> ContextMenuControls => null;
 
-        class BossHealthWatcherImage : ComparisonWatcherImage<ushort>
+        class BossHealthWatcherImage : ComparisonImageWatcher<ushort>
         {
             public BossHealthWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, ushort segment)
                 : base(name, frames, x, y, center, height, width, segment)
@@ -45,7 +46,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
         }
 
 
-        class BossWatcherImage<T> : BoolWatcherImage<T> where T : struct, IComparable
+        class BossWatcherImage<T> : BoolImageWatcher<T> where T : struct, IComparable
         {
             public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T flag)
             : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))

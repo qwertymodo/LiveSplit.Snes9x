@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.Snes9x;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
@@ -10,8 +11,6 @@ namespace LiveSplit.SuperMetroid.UI.Components
 {
     public class SuperMetroidComponent : IComponent
     {
-        internal static Game game = new Game();
-
         public ComponentRendererComponent InternalComponent { get; protected set; }
 
         public string ComponentName => "Super Metroid Tracker";
@@ -36,6 +35,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
         
         public SuperMetroidComponent(LiveSplitState state)
         {
+            GameLoader.Load(new SuperMetroid());
             InternalComponent = new ComponentRendererComponent();
             var components = new List<IComponent>();
             components.Add(new ItemTracker());
@@ -73,7 +73,7 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-            game.Update(state);
+            GameLoader.game?.Update(state);
 
             if (invalidator != null)
                 InternalComponent.Update(invalidator, state, width, height, mode);
