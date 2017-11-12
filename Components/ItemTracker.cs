@@ -42,7 +42,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, T target = default(T)) where T : struct, IComparable
         {
-            List<Image> images = icons[name];
+            List<Image> images;
+            icons.TryGetValue(name, out images);
             if (images != null)
                 items.Add(name, new BoolImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, target, Comparator.GetComparator<T>(comparator)));
         }
@@ -50,7 +51,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddFlagItem<T>(int x, int y, int scale, string name, string field, T flag, bool set = true) where T : struct, IComparable
         {
-            List<Image> images = icons[name];
+            List<Image> images;
+            icons.TryGetValue(name, out images);
             if (images != null)
                 items.Add(name, new BoolImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, flag, Comparator.TestFlag<T>(set)));
         }
@@ -64,7 +66,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddIndexItem<T>(int x, int y, int scale, string name, Comparator.Type comparator, List<T> targets) where T : struct, IComparable
         {
-            List<Image> images = icons[name];
+            List<Image> images;
+            icons.TryGetValue(name, out images);
             if (images != null)
                 items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
         }
@@ -72,7 +75,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddIndexItem<T>(int x, int y, int scale, string name, string icon, Comparator.Type comparator, List<T> targets) where T : struct, IComparable
         {
-            List<Image> images = icons[icon];
+            List<Image> images;
+            icons.TryGetValue(icon, out images);
             if (images != null)
                 items.Add(name, new IndexImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.GetComparator<T>(comparator)));
         }
@@ -80,7 +84,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddFlagIndexItem<T>(int x, int y, int scale, string name, string field, List<T> targets, bool set = true) where T : struct, IComparable
         {
-            List<Image> images = icons[name];
+            List<Image> images;
+            icons.TryGetValue(name, out images);
             if (images != null)
                 items.Add(name, new IndexImageWatcher<T>(field, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets, Comparator.TestFlag<T>(set)));
         }
@@ -88,7 +93,8 @@ namespace LiveSplit.Snes9x
 
         protected void AddCounter(int x, int y, int scale, int digits, string name, string image)
         {
-            List<Image> images = icons[image];
+            List<Image> images;
+            icons.TryGetValue(image, out images);
             for (int i = digits; i > 0; --i)
             {
                 int digit = i;
@@ -121,9 +127,12 @@ namespace LiveSplit.Snes9x
             g.PixelOffsetMode = PixelOffsetMode.Half;
             g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, width, height);
 
-            foreach (var item in items)
+            if (!GameLoader.game?.IsRaceROM() ?? true)
             {
-                item.Value.GetType().GetMethod("Draw")?.Invoke(item.Value, new object[] { g, state, width, height, mode });
+                foreach (var item in items)
+                {
+                    item.Value.GetType().GetMethod("Draw")?.Invoke(item.Value, new object[] { g, state, width, height, mode });
+                }
             }
         }
 

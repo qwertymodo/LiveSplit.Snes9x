@@ -17,8 +17,8 @@ namespace LiveSplit.SuperMetroid.UI.Components
 
         class BossWatcherImage<T> : BoolImageWatcher<T> where T : struct, IComparable
         {
-            public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int height, int width, T flag)
-            : base(name, frames, x, y, center, height, width, flag, Comparator.TestFlag<T>(false))
+            public BossWatcherImage(string name, List<Image> frames, int x, int y, bool center, int width, int height, T flag)
+            : base(name, frames, x, y, center, width, height, flag, Comparator.TestFlag<T>(false))
             { }
 
             public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
@@ -29,11 +29,11 @@ namespace LiveSplit.SuperMetroid.UI.Components
             }
         }
 
-        private void AddBoss<T>(int x, int y, int height, int width, string name, int idx, T flag) where T : struct, IComparable
+        private void AddBoss<T>(int x, int y, int width, int height, string name, int idx, T flag) where T : struct, IComparable
         {
             List<Image> images = icons[name];
             if (images != null)
-                items.Add(name, new BossWatcherImage<T>("Bosses[" + idx + "]", images, x + 1, y + 1, false, height, width, flag));
+                items.Add(name, new BossWatcherImage<T>("Bosses[" + idx + "]", images, x + 1, y + 1, false, width, height, flag));
         }
 
 

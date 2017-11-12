@@ -101,12 +101,12 @@ namespace LiveSplit.SuperMetroid.UI.Components
             emulator.RegisterWatcher("IGT Hours", typeof(ushort), emulator.MemoryType.WRAM, 0x09E0);
 
             for (int i = 0; i < 20; ++i)
-                emulator.RegisterWatcher("Pickups[" + i + "]", typeof(byte), emulator.MemoryType.WRAM, 0xD870 + i);
+                emulator.RegisterWatcher("Pickups", i, typeof(byte), emulator.MemoryType.WRAM, 0xD870 + i);
 
             emulator.RegisterWatcher("Bosses", typeof(Bosses), emulator.MemoryType.WRAM, 0xD828);
 
             for (int i = 0; i < 7; ++i)
-                emulator.RegisterWatcher("Bosses[" + i + "]", typeof(byte), emulator.MemoryType.WRAM, 0xD828 + i);
+                emulator.RegisterWatcher("Bosses", i, typeof(byte), emulator.MemoryType.WRAM, 0xD828 + i);
         }
 
         public override bool IsLoaded()

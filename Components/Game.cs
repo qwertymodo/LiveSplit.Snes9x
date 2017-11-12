@@ -18,6 +18,10 @@ namespace LiveSplit.Snes9x
 
         protected DeepPointer romName;
 
+        protected bool randomized = false;
+
+        protected bool tourney = false;
+
         [Flags]
         public enum BoolFlag : byte
         {
@@ -25,20 +29,14 @@ namespace LiveSplit.Snes9x
             TRUE = 0x01,
         }
 
-        public T Get<T>(string name) where T : struct, IComparable
+        public T Get<T>(string name, int index = -1) where T : struct, IComparable
         {
-            if (emulator.GetWatcher(name) == null)
-                return default(T);
-
-            return ((MemoryWatcher<T>)(emulator.GetWatcher(name))).Current;
+            return ((MemoryWatcher<T>)emulator.GetWatcher(name, index))?.Current ?? default(T);
         }
 
-        public T Previous<T>(string name) where T : struct, IComparable
+        public T Previous<T>(string name, int index = -1) where T : struct, IComparable
         {
-            if (emulator.GetWatcher(name) == null)
-                return default(T);
-
-            return ((MemoryWatcher<T>)(emulator.GetWatcher(name))).Old;
+            return ((MemoryWatcher<T>)emulator.GetWatcher(name, index))?.Old ?? default(T);
         }
 
         public virtual bool IsLoaded()
@@ -49,6 +47,16 @@ namespace LiveSplit.Snes9x
         public virtual bool IsRunning()
         {
             return false;
+        }
+
+        public bool IsRandomized()
+        {
+            return IsLoaded() && randomized;
+        }
+
+        public bool IsRaceROM()
+        {
+            return IsLoaded() && tourney;
         }
 
         public virtual TimeSpan GameTime(LiveSplitState state)

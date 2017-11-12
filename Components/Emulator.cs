@@ -140,8 +140,19 @@ namespace LiveSplit.Snes9x
             }
         }
 
-        public MemoryWatcher GetWatcher(string name)
+        public void RegisterWatcher(string name, int index, Type valueType, MemoryType memoryType, int address)
         {
+            if (index >= 0)
+                name = name + "[" + index + "]";
+
+            RegisterWatcher(name, valueType, memoryType, address);            
+        }
+
+        public MemoryWatcher GetWatcher(string name, int index = -1)
+        {
+            if (index >= 0)
+                name = name + "[" + index + "]";
+
             if(watchers?.Any() ?? false)
                 return watchers.ContainsKey(name) ? watchers[name] : null;
 

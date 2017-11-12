@@ -1,6 +1,11 @@
-﻿using LiveSplit.Snes9x;
+﻿using LiveSplit.Model;
+using LiveSplit.Snes9x;
+using LiveSplit.UI;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using static LiveSplit.ALinkToThePast.UI.Components.ALinkToThePast;
+using static LiveSplit.Snes9x.Game;
 
 namespace LiveSplit.ALinkToThePast.UI.Components
 {
@@ -11,6 +16,98 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         public override float MinimumHeight => 336;
 
         public override float MinimumWidth => 360;
+
+        class TunicImageWatcher : ImageWatcher<Tuple<ArmorLevel,BoolFlag>>
+        {
+            protected List<Tuple<ArmorLevel, BoolFlag>> Targets;
+            protected Tuple<ArmorLevel, BoolFlag> Current;
+            protected Tuple<ArmorLevel, BoolFlag> Previous;
+
+            public TunicImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height)
+            : base(name, frames, x, y, center, width, height)
+            {
+                Targets = new List<Tuple<ArmorLevel, BoolFlag>> {
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.GREEN, BoolFlag.FALSE),
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.BLUE, BoolFlag.FALSE),
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.RED, BoolFlag.FALSE),
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.GREEN, BoolFlag.TRUE),
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.BLUE, BoolFlag.TRUE),
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.RED, BoolFlag.TRUE)
+                };
+            }
+
+            protected virtual void Draw(Graphics g, int width, int height, int index, float opacity = 0.5f)
+            {
+                if (index >= Frames.Count)
+                    index = Frames.Count - 1;
+
+                if (index < 0)
+                    Draw(g, width, height, false, opacity);
+
+                else
+                {
+                    if (Centered)
+                        DrawImageFromCenter(g, Frames[index], X, Y, Width, Height, width, height);
+
+                    else
+                        g.DrawImage(Frames[index], X, Y, Width, Height);
+                }
+            }
+
+            public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+            {
+                Update();
+
+                for (int i = Targets.Count - 1; i >= 0; --i)
+                {
+                    if (Current.Equals(Targets[i]))
+                    {
+                        Draw(g, (int)width, (int)height, i);
+                        return;
+                    }
+                }
+
+                Draw(g, (int)width, (int)height, true);
+            }
+
+            protected void Update()
+            {
+                Previous = Current;
+                Current = GameLoader.game?.IsRunning() ?? false ?
+                    new Tuple<ArmorLevel, BoolFlag>(GameLoader.game.Get<ArmorLevel>("Tunic"), GameLoader.game.Get<BoolFlag>("Moon Pearl")) :
+                    new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.GREEN, BoolFlag.FALSE);
+            }
+        }
+
+        protected void AddTunic(int x, int y, int scale)
+        {
+            List<Image> images;
+            icons.TryGetValue("Tunic", out images);
+            if (images != null)
+                items.Add("Tunic", new TunicImageWatcher("Tunic", images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale));
+        }
+
+        class EquipmentImageWatcher<T> : IndexImageWatcher<T> where T : struct, IComparable
+        {
+            public EquipmentImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height, List<T> targets)
+                : base(name, frames, x, y, center, width, height, targets)
+            { }
+
+            public override void Draw(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
+            {
+                base.Draw(g, state, width, height, mode);
+
+                Draw(g, (int)width, (int)height, updateFunc(Current, Target), 0);
+            }
+        }
+
+        protected void AddEquipment<T>(int x, int y, int scale, string name, List<T> targets) where T : struct, IComparable
+        {
+            List<Image> images;
+            icons.TryGetValue(name, out images);
+            if (images != null)
+                items.Add(name, new EquipmentImageWatcher<T>(name, images, x + 1, y + 1, false, images[0].Height * scale, images[0].Width * scale, targets));
+        }
 
         public ItemTracker()
         {

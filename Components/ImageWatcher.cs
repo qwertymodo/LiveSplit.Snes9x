@@ -79,7 +79,7 @@ namespace LiveSplit.Snes9x
         public ImageWatcher()
         { }
 
-        public ImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width)
+        public ImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height)
         {
             Name = name;
             Frames = frames;
@@ -149,8 +149,8 @@ namespace LiveSplit.Snes9x
         protected T Current;
         protected T Previous;
 
-        public ComparisonImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target)
-            : base(name, frames, x, y, center, height, width)
+        public ComparisonImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height, T target)
+            : base(name, frames, x, y, center, width, height)
         {
             Target = target;
         }
@@ -161,7 +161,7 @@ namespace LiveSplit.Snes9x
         protected virtual void Update()
         {
             Previous = Current;
-            Current = GameLoader.game.IsRunning() ? GameLoader.game.Get<T>(Name) : default(T);
+            Current = GameLoader.game.IsRunning() ? GameLoader.game.Get<T>(Name) : Current;
         }
     }
 
@@ -170,8 +170,8 @@ namespace LiveSplit.Snes9x
     {
         protected Func<T, T, bool> updateFunc;
 
-        public BoolImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, T target, Func<T, T, bool> func)
-            : base(name, frames, x, y, center, height, width, target)
+        public BoolImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height, T target, Func<T, T, bool> func)
+            : base(name, frames, x, y, center, width, height, target)
         {
             updateFunc = func;
         }
@@ -190,15 +190,15 @@ namespace LiveSplit.Snes9x
         List<T> Targets = new List<T>();
         protected Func<T, T, bool> updateFunc;
 
-        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets)
-            : base(name, frames, x, y, center, height, width, default(T))
+        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height, List<T> targets)
+            : base(name, frames, x, y, center, width, height, default(T))
         {
             Targets = targets;
             updateFunc = Comparator.GetComparator<T>(Comparator.Type.EQUAL);
         }
 
-        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int height, int width, List<T> targets, Func<T, T, bool> func)
-            : base(name, frames, x, y, center, height, width, default(T))
+        public IndexImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height, List<T> targets, Func<T, T, bool> func)
+            : base(name, frames, x, y, center, width, height, default(T))
         {
             Targets = targets;
             updateFunc = func;
