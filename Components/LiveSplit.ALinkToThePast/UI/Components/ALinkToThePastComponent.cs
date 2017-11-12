@@ -40,7 +40,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             GameLoader.Load(new ALinkToThePast());
             InternalComponent = new ComponentRendererComponent();
             var components = new List<IComponent>();
-            components.Add(new ItemTracker());
+            //components.Add(new ItemTracker());
+            //components.Add(new LightWorldMapTracker());
+            components.Add(new DarkWorldMapTracker());
             InternalComponent.VisibleComponents = components;
         }
 
@@ -76,7 +78,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         {
             GameLoader.game?.Update(state);
 
-            if (invalidator != null)
+            if (GameLoader.game?.IsRunning() ?? false && invalidator != null)
                 InternalComponent.Update(invalidator, state, width, height, mode);
         }
     }

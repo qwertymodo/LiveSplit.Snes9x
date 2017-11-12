@@ -1,0 +1,106 @@
+[==Light World==]
+Aginah's Cave
+-------------
+Complete:
+Room 266: Chest
+
+Available:
+Have Bombs
+
+
+Blacksmiths
+-----------
+Complete:
+7EF411: Bit 4
+
+Available:
+Have Moon Pearl + Titan's Mitt
+
+
+Bombos Tablet
+-------------
+OW Area $30: Event flag?
+
+
+Bonk Rocks
+----------
+Room 292: Chest
+
+
+Bottle Vendor
+-----------
+7EF3C9: Bit 1
+
+
+Checkerboard Cave
+-----------------
+Room 294: Chest
+
+
+Chicken House
+-------------
+Complete:
+Room 264: Chest
+
+Available:
+Have Bombs
+
+
+Death Mountain East
+Desert Cliff
+Desert Palace
+Eastern Palace
+Ether Tablet
+Floating Island
+Floodgate
+Graveyard Cliff
+Haunted Grove
+Hobo
+Hyrule Castle Dungeon
+Hyrule Castle Secret Entrance
+Hyrule Castle Tower
+Kakariko Well
+-------------
+Room 47: Chest (x5)
+
+King's Tomb
+King Zora
+Forest Hideout
+Lake Hylia Cave
+Lake Hylia Island
+Library
+Link's House
+------------
+Room 260: Chest
+
+Lost Old Man
+Lumberjack's Tree
+Mad Batter
+Master Sword Pedestal
+Mimic Cave
+Moldorm Cave
+Mushroom
+Race
+Sahasrahla
+Sahasrahla's Shrine
+Sanctuary
+Sewer Escape
+Sewer Dark Room
+Sick Kid
+South of Grove
+Spectacle Rock
+Spectacle Rock Cave
+Spiral Cave
+Tavern
+------
+Room 259: Chest
+
+Thief's Chest
+Thieves' Hideout
+----------------
+Room 285: Chest (x5)
+
+Tower of Hera
+Waterfall of Wishing
+Witch
+Zora River Ledge

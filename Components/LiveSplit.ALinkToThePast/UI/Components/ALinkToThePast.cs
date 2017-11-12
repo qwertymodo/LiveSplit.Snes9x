@@ -19,6 +19,44 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AGAHNIM = 0x03
         }
 
+        [Flags]
+        public enum Events1 : byte
+        {
+            TALKTOUNCLE     = 0x01, // Talk to your uncle in the secret passage
+            TALKTOPRIEST    = 0x02, // Talk to the dying priest after Zelda is captured
+            SANCTUARY       = 0x04, // Bring Zelda to the sanctuary
+            UNCLELEAVES     = 0x10, // Uncle leaves the house
+            MUDORA          = 0x20, // Get the Book of Mudora (??)
+            FORTUNE         = 0x40  // Toggles between 2 fortune dialogs
+        }
+
+        [Flags]
+        public enum Events2 : byte
+        {
+            HOBO        = 0x01, // Received the hobo's bottle
+            MERCHANT    = 0x02, // Received the merchant's bottle
+            FLUTEBOY    = 0x08, // Spoke to flute boy (DW)
+            THIEFSCHEST = 0x10, // Purple chest has been opened
+            BLACKSMITH  = 0x20, // Returned the frog to his partner
+            FORGING     = 0x80  // The blacksmiths currently have your sword
+        }
+
+        [Flags]
+        public enum SpecialItems : ushort
+        {
+            OLDMAN          = 0x0001, // Received the mirror from the lost old man
+            KINGZORA        = 0x0002, // Received the flippers from King Zora
+            SICKKID         = 0x0004, // Received the bug net from the sick kid
+            SAHASRAHLA      = 0x0010, // Recieved the boots from Sahasrahla
+            LIBRARY         = 0x0080, // Collected the book from the library
+            ETHER           = 0x0100, // Received the ether medallion
+            BOMBOS          = 0x0200, // Received the bombos medallion
+            TEMPEREDSWORD   = 0x0400, // Received the tempered sword from the blacksmiths
+            MUSHROOM        = 0x1000, // Collected the mushroom
+            WITCH           = 0x2000, // Received the magic powder from the witch
+            MADBATTER       = 0x8000  // Received the half magic from the mad batter
+        }
+
         public enum GameModule : byte
         {
             TITLE           = 0x00, // Triforce / Zelda startup screens
@@ -89,22 +127,62 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public enum Dungeon : byte
         {
-            SEWER = 0x00,
-            HYRULECASTLE = 0x02,
-            EASTERNPALACE = 0x04,
-            DESERTPALACE = 0x06,
-            CASTLETOWER = 0x08,
-            SWAMPPALACE = 0x0A,
-            DARKPALACE = 0x0C,
-            MISERYMIRE = 0x0E,
-            SKULLWOODS = 0x10,
-            ICEPALACE = 0x12,
-            TOWEROFHERA = 0x14,
-            THIEVESTOWN = 0x16,
-            TURTLEROCK = 0x18,
-            GANONSTOWER = 0x1A,
-            UNUSED1 = 0x1C,
-            UNUSED2 = 0x1E
+            SEWER           = 0x00,
+            HYRULECASTLE    = 0x02,
+            EASTERNPALACE   = 0x04,
+            DESERTPALACE    = 0x06,
+            CASTLETOWER     = 0x08,
+            SWAMPPALACE     = 0x0A,
+            DARKPALACE      = 0x0C,
+            MISERYMIRE      = 0x0E,
+            SKULLWOODS      = 0x10,
+            ICEPALACE       = 0x12,
+            TOWEROFHERA     = 0x14,
+            THIEVESTOWN     = 0x16,
+            TURTLEROCK      = 0x18,
+            GANONSTOWER     = 0x1A,
+            UNUSED1         = 0x1C,
+            UNUSED2         = 0x1E
+        }
+
+        [Flags]
+        public enum RoomState : ushort
+        {
+            Q1VISITED       = 0x0001,   // Visited SE quadrant
+            Q2VISITED       = 0x0002,   // Visited SW quadrant
+            Q3VISITED       = 0x0004,   // Visited NE quadrant
+            Q4VISITED       = 0x0008,   // Visited NW quadrant
+            UNLOCK1         = 0x0010,   // Unlocked chest/big key door
+            UNLOCK2         = 0x0020,   // Unlocked chest/big key door
+            UNLOCK3         = 0x0040,   // Unlocked chest/big key door
+            UNLOCK4         = 0x0080,   // Unlocked chest/big key door
+            RUPEETILE       = 0x0100,   // Collected rupee tiles (or unlocked chest/big key door)
+            KEYITEM         = 0x0200,   // Collected key/special item (or unlocked chest/big key door)
+            KEY2            = 0x0400,   // Collected key
+            BOSSDEFEATED    = 0x0800,   // Defeated boss
+            DOOR1           = 0x1000,   // Opened door
+            DOOR2           = 0x2000,   // Opened door
+            DOOR3           = 0x4000,   // Opened door
+            DOOR4           = 0x8000    // Opened door
+        }
+
+        [Flags]
+        public enum CurrentRoomState : byte
+        {
+            UNLOCK1     = 0x01, // Unlocked chest/big key door
+            UNLOCK2     = 0x02, // Unlocked chest/big key door
+            UNLOCK3     = 0x04, // Unlocked chest/big key door
+            UNLOCK4     = 0x08, // Unlocked chest/big key door
+            RUPEETILE   = 0x10, // Collected rupee tiles (or unlocked chest/big key door)
+            KEYITEM     = 0x20, // Collected key/special item (or unlocked chest/big key door)
+            KEY2        = 0x40, // Collected key
+            HEARTPIECE  = 0x80  // Collected heart piece
+        }
+
+        [Flags]
+        public enum OverworldState : byte
+        {
+            COLLECTED   = 0x40, // Item collected from this area
         }
 
         public enum BowLevel : byte
@@ -233,7 +311,6 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         }
 
         bool running = false;
-        bool randomized = false;
 
         public ALinkToThePast()
         {
@@ -244,6 +321,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Book of Mudora", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34E);
             emulator.RegisterWatcher("Boomerang", typeof(BoomerangLevel), emulator.MemoryType.WRAM, 0xF341);
             emulator.RegisterWatcher("Boots", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF355);
+            emulator.RegisterWatcher("Bottles", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34F);
             emulator.RegisterWatcher("Bottle 1", typeof(BottleItem), emulator.MemoryType.WRAM, 0xF35C);
             emulator.RegisterWatcher("Bottle 2", typeof(BottleItem), emulator.MemoryType.WRAM, 0xF35D);
             emulator.RegisterWatcher("Bottle 3", typeof(BottleItem), emulator.MemoryType.WRAM, 0xF35E);
@@ -252,31 +330,49 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Cane of Somaria", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF350);
             emulator.RegisterWatcher("Cane of Byrna", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF351);
             emulator.RegisterWatcher("Crystals", typeof(Crystals), emulator.MemoryType.WRAM, 0xF37A);
+            emulator.RegisterWatcher("Current Room Items", typeof(CurrentRoomState), emulator.MemoryType.WRAM, 0x0403);
+            emulator.RegisterWatcher("Current Room Number", typeof(ushort), emulator.MemoryType.WRAM, 0x00A0);
             emulator.RegisterWatcher("Dungeon", typeof(Dungeon), emulator.MemoryType.WRAM, 0x040C);
             emulator.RegisterWatcher("Ether Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF348);
+            emulator.RegisterWatcher("Events 1", typeof(Events1), emulator.MemoryType.WRAM, 0xF3C6);
+            emulator.RegisterWatcher("Events 2", typeof(Events2), emulator.MemoryType.WRAM, 0xF3C9);
             emulator.RegisterWatcher("Fire Rod", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF345);
             emulator.RegisterWatcher("Flippers", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF356);
-            emulator.RegisterWatcher("Flute", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34C);
+            emulator.RegisterWatcher("Flute", typeof(FluteLevel), emulator.MemoryType.WRAM, 0xF34C);
             emulator.RegisterWatcher("Gloves", typeof(GlovesLevel), emulator.MemoryType.WRAM, 0xF354);
             emulator.RegisterWatcher("Hammer", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34B);
+            emulator.RegisterWatcher("Haunted Grove", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF416);
             emulator.RegisterWatcher("Hookshot", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF342);
             emulator.RegisterWatcher("Ice Rod", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF346);
+            emulator.RegisterWatcher("Indoors", typeof(BoolFlag), emulator.MemoryType.WRAM, 0x001B);
             emulator.RegisterWatcher("Lantern", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34A);
             emulator.RegisterWatcher("Magic Cape", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF352);
             emulator.RegisterWatcher("Magic Mirror", typeof(MirrorLevel), emulator.MemoryType.WRAM, 0xF353);
             emulator.RegisterWatcher("Main Module", typeof(GameModule), emulator.MemoryType.WRAM, 0x0010);
             emulator.RegisterWatcher("Moon Pearl", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF357);
-            emulator.RegisterWatcher("Mushroom", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF344);
+            emulator.RegisterWatcher("Mushroom", typeof(MushroomLevel), emulator.MemoryType.WRAM, 0xF344);
             emulator.RegisterWatcher("Net", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34D);
             emulator.RegisterWatcher("Pendants", typeof(Pendants), emulator.MemoryType.WRAM, 0xF374);
             emulator.RegisterWatcher("Player State", typeof(PlayerState), emulator.MemoryType.WRAM, 0x005D);
+            emulator.RegisterWatcher("Progress", typeof(Progress), emulator.MemoryType.WRAM, 0xF3C5);
             emulator.RegisterWatcher("Quake Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF349);
             emulator.RegisterWatcher("Rupees", typeof(ushort), emulator.MemoryType.WRAM, 0xF362);
             emulator.RegisterWatcher("Shield", typeof(ShieldLevel), emulator.MemoryType.WRAM, 0xF35A);
+            emulator.RegisterWatcher("Special Items", typeof(SpecialItems), emulator.MemoryType.WRAM, 0xF410);
             emulator.RegisterWatcher("Swappable Inventory 1", typeof(SwappableInventory1), emulator.MemoryType.WRAM, 0xF412);
             emulator.RegisterWatcher("Swappable Inventory 2", typeof(SwappableInventory2), emulator.MemoryType.WRAM, 0xF414);
             emulator.RegisterWatcher("Sword", typeof(SwordLevel), emulator.MemoryType.WRAM, 0xF359);
             emulator.RegisterWatcher("Tunic", typeof(ArmorLevel), emulator.MemoryType.WRAM, 0xF35B);
+            
+            for (int i = 0; i < 130; ++i)
+            {
+                emulator.RegisterWatcher("Overworld State", i, typeof(OverworldState), emulator.MemoryType.WRAM, 0xF280 + i);
+            }
+
+            for (int i = 0; i < 296; ++i)
+            {
+                emulator.RegisterWatcher("Room State", i, typeof(RoomState), emulator.MemoryType.WRAM, 0xF000 + (i * 2));
+            }
         }
 
 
@@ -291,6 +387,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                 string name;
                 romName.DerefString(emulator.emulatorProcess, 21, out name);
                 GameModule currentModule = Get<GameModule>("Main Module");
+
+                //tourney = name?.Substring(3, 7).Equals("TOURNEY") ?? false;
 
                 if (name?.StartsWith(gameName) ?? false)
                 {

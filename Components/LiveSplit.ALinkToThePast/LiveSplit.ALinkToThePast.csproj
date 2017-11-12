@@ -64,11 +64,20 @@
       <Link>ItemTracker.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UI\Components\ALinkToThePast.cs" />
     <Compile Include="UI\Components\ALinkToThePastComponent.cs" />
     <Compile Include="UI\Components\ALinkToThePastFactory.cs" />
+    <Compile Include="UI\Components\DarkWorldMapTracker.cs" />
     <Compile Include="UI\Components\Images.cs" />
     <Compile Include="UI\Components\ItemTracker.cs" />
+    <Compile Include="UI\Components\LightWorldMapTracker.cs" />
+    <Compile Include="UI\Components\LocationWatcher.cs" />
+    <Compile Include="UI\Components\MapTracker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />
@@ -82,6 +91,18 @@
       <Project>{56dea3a0-2eb7-493b-b50f-a5e3aa8ae52a}</Project>
       <Name>UpdateManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LightWorldMap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DarkWorldMap.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
