@@ -11,9 +11,13 @@ using static LiveSplit.ALinkToThePast.UI.Components.ALinkToThePast;
 
 namespace LiveSplit.ALinkToThePast.UI.Components
 {
-    class ALinkToThePastComponent : IComponent
+    public class ALinkToThePastComponent : IComponent
     {
         public ComponentRendererComponent InternalComponent { get; protected set; }
+
+        public ALinkToThePastSettings Settings { get; set; }
+
+        private static int SettingsHash = 0;
 
         public string ComponentName => "A Link to the Past Tracker";
 
@@ -37,13 +41,10 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public ALinkToThePastComponent(LiveSplitState state)
         {
+            Settings = new ALinkToThePastSettings();
             GameLoader.Load(new ALinkToThePast());
             InternalComponent = new ComponentRendererComponent();
-            var components = new List<IComponent>();
-            //components.Add(new ItemTracker());
-            //components.Add(new LightWorldMapTracker());
-            components.Add(new DarkWorldMapTracker());
-            InternalComponent.VisibleComponents = components;
+            InternalComponent.VisibleComponents = new List<IComponent>();
         }
 
         public void Dispose()
@@ -62,23 +63,50 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public XmlNode GetSettings(XmlDocument document)
         {
-            return document.CreateElement("x");
+            return Settings.GetSettings(document);
         }
 
         public Control GetSettingsControl(LayoutMode mode)
         {
-            return null;
+            Settings.Mode = mode;
+            return Settings;
         }
 
         public void SetSettings(XmlNode settings)
         {
+            Settings.SetSettings(settings);
         }
 
+        public int GetSettingsHashCode()
+        {
+            int hash = Settings.GetSettingsHashCode();
+
+            if(hash != SettingsHash)
+            {
+                var components = new List<IComponent>();
+
+                if (Settings.MapTracker)
+                {
+                    components.Add(new LightWorldMapTracker());
+                    components.Add(new DarkWorldMapTracker());
+                }
+
+                if (Settings.ItemTracker)
+                {
+                    components.Add(new ItemTracker());
+                }
+
+                InternalComponent.VisibleComponents = components;
+            }
+
+            SettingsHash = hash;
+            return SettingsHash;
+        }
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             GameLoader.game?.Update(state);
 
-            if (GameLoader.game?.IsRunning() ?? false && invalidator != null)
+            if (invalidator != null && (GameLoader.game?.IsRunning() ?? false))
                 InternalComponent.Update(invalidator, state, width, height, mode);
         }
     }

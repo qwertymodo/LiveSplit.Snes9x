@@ -72,6 +72,12 @@
     <Compile Include="UI\Components\ALinkToThePast.cs" />
     <Compile Include="UI\Components\ALinkToThePastComponent.cs" />
     <Compile Include="UI\Components\ALinkToThePastFactory.cs" />
+    <Compile Include="UI\Components\ALinkToThePastSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Components\ALinkToThePastSettings.Designer.cs">
+      <DependentUpon>ALinkToThePastSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Components\DarkWorldMapTracker.cs" />
     <Compile Include="UI\Components\Images.cs" />
     <Compile Include="UI\Components\ItemTracker.cs" />
@@ -96,6 +102,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Components\ALinkToThePastSettings.resx">
+      <DependentUpon>ALinkToThePastSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
