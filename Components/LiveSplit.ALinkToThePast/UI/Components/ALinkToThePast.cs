@@ -182,7 +182,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         [Flags]
         public enum OverworldState : byte
         {
-            COLLECTED   = 0x40, // Item collected from this area
+            SECONDARY   = 0x02, // Secondary overlay active
+            OVERLAY     = 0x20, // Primary overlay active
+            COLLECTED   = 0x40 // Item collected from this area
         }
 
         public enum BowLevel : byte
