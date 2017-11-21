@@ -127,7 +127,7 @@ namespace LiveSplit.Snes9x
             g.PixelOffsetMode = PixelOffsetMode.Half;
             g.FillRectangle(new SolidBrush(backgroundColor), 0, 0, width, height);
 
-            if (!GameLoader.game?.IsRaceROM() ?? true)
+            if (!(GameLoader.game?.IsRaceROM() ?? true))
             {
                 foreach (var item in items)
                 {

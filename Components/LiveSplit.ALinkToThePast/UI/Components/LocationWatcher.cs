@@ -265,7 +265,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                 bool lantern = CheckFlag("Lantern");
 
                 var game = GameLoader.game;
-                if (!game?.IsRunning() ?? false)
+                if (!(game?.IsRunning() ?? false))
                     return _default;
 
                 if (_default == LocationState.DARK && lantern)
@@ -353,7 +353,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                     int _room = room;
 
                     var game = GameLoader.game;
-                    if (!game?.IsRunning() ?? false)
+                    if (!(game?.IsRunning() ?? false))
                         return false;
 
                     return CheckRoom(room, 1) || CheckRoom(room, 6, false);

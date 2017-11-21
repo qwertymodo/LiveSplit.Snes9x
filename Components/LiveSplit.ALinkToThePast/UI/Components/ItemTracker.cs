@@ -73,7 +73,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             protected void Update()
             {
                 Previous = Current;
-                Current = GameLoader.game?.IsRunning() ?? false ?
+                Current = (GameLoader.game?.IsRunning() ?? false) ?
                     new Tuple<ArmorLevel, BoolFlag>(GameLoader.game.Get<ArmorLevel>("Tunic"), GameLoader.game.Get<BoolFlag>("Moon Pearl")) :
                     new Tuple<ArmorLevel, BoolFlag>(ArmorLevel.GREEN, BoolFlag.FALSE);
             }
