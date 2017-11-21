@@ -57,7 +57,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                     switch (count)
                     {
                         case 1:
-                            return state.HasFlag(CurrentRoomState.UNLOCK1);
+                            return state.HasFlag(CurrentRoomState.UNLOCK1) || state.HasFlag(CurrentRoomState.KEY2);
 
                         case 2:
                             return !checkAll ? state.HasFlag(CurrentRoomState.UNLOCK2) : state.HasFlag(CurrentRoomState.UNLOCK1 | CurrentRoomState.UNLOCK2);
@@ -89,7 +89,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                     switch (count)
                     {
                         case 1:
-                            return state.HasFlag(RoomState.UNLOCK1);
+                            return state.HasFlag(RoomState.UNLOCK1) || state.HasFlag(RoomState.KEY2);
 
                         case 2:
                             return !checkAll ? state.HasFlag(RoomState.UNLOCK2) : state.HasFlag(RoomState.UNLOCK1 | RoomState.UNLOCK2);
@@ -248,9 +248,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             return CheckLevel("Flute", FluteLevel.BIRD);
         }
 
-        bool CheckOverworldArea(int area)
+        bool CheckOverworldArea(int area, OverworldState state = OverworldState.COLLECTED)
         {
-            return CheckFlag("Overworld State", area, OverworldState.COLLECTED);
+            return CheckFlag("Overworld State", area, state);
         }
 
         private void AddLocation(string name, LocationState defaultState = LocationState.INACCESSIBLE, Func<bool> complete = null, Func<bool> accessible = null, Func<bool> partial = null, Func<bool> glitchAccessible = null, Func<bool> visible = null, Func<bool> glitchVisible = null, bool dark = false)
@@ -371,22 +371,34 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Aginah's Cave", LocationState.INACCESSIBLE, 266, () => CheckBombs());
             AddLocation("Blacksmiths", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.TEMPEREDSWORD), () => CheckLevel("Gloves", GlovesLevel.TITAN) && CheckFlag("Moon Pearl"));
             AddLocation("Bombos Tablet", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.BOMBOS), () => CheckAccess(DarkWorldRegion.SOUTH) && CheckMirror() && CheckFlag("Book of Mudora") && CheckLevel("Sword", SwordLevel.MASTER));
+            AddLocation("Bomb Hut", LocationState.INACCESSIBLE, 262, () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckBombs());
             AddLocation("Bonk Rocks", LocationState.INACCESSIBLE, 292, () => CheckFlag("Boots"));
             AddLocation("Bottle Vendor", LocationState.INACCESSIBLE, () => CheckFlag("Events 2", Events2.MERCHANT), () => CheckRupees(100));
+            AddLocation("Bumper Cave", LocationState.INACCESSIBLE, () => CheckOverworldArea(74), () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckFlag("Moon Pearl") && CheckFlag("Magic Cape"));
+            AddLocation("Bunny Cave", LocationState.INACCESSIBLE, 248, 2, () => CheckAccess(DeathMountainRegion.DARKEAST));
+            AddLocation("Catfish", LocationState.INACCESSIBLE, () => CheckOverworldArea(79), () => CheckAccess(DarkWorldRegion.NORTHEAST));
             AddLocation("Checkerboard Cave", LocationState.INACCESSIBLE, 294, () => CheckAccess(DarkWorldRegion.SOUTHWEST) && CheckMirror());
             AddLocation("Chicken House", LocationState.INACCESSIBLE, 264, () => CheckBombs());
+            AddLocation("C House", LocationState.INACCESSIBLE, 284, () => CheckAccess(DarkWorldRegion.NORTHWEST));
             AddLocation("Death Mountain East", LocationState.INACCESSIBLE, () => CheckRoom(239, 5) && CheckRoom(255, 2), () => CheckAccess(DeathMountainRegion.SOUTHEAST) && CheckBombs(), () => CheckAccess(DeathMountainRegion.SOUTHEAST));
             AddLocation("Desert Cliff", LocationState.INACCESSIBLE, () => CheckOverworldArea(48), () => CheckLevel("Gloves", GlovesLevel.POWER));
             AddLocation("Desert Palace", LocationState.INACCESSIBLE, () => false, () => CheckFlag("Book of Mudora") && CheckFlag("Boots") && CheckLevel("Gloves", GlovesLevel.POWER), () => CheckFlag("Book of Mudora"));
+            AddLocation("Digging Game", LocationState.INACCESSIBLE, () => CheckOverworldArea(104), () => CheckAccess(DarkWorldRegion.SOUTH));
             AddLocation("Eastern Palace", LocationState.ACCESSIBLE);
-            AddLocation("Ether Tablet", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.BOMBOS), () => CheckAccess(DeathMountainRegion.NORTHWEST) && CheckFlag("Book of Mudora") && CheckLevel("Sword", SwordLevel.MASTER));
+            AddLocation("Ether Tablet", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.ETHER), () => CheckAccess(DeathMountainRegion.NORTHWEST) && CheckFlag("Book of Mudora") && CheckLevel("Sword", SwordLevel.MASTER));
+            AddLocation("Fat Fairy", LocationState.INACCESSIBLE, 278, 2, () => false);
             AddLocation("Floating Island", LocationState.INACCESSIBLE, () => CheckOverworldArea(5), () => CheckAccess(DarkWorldRegion.DEATHMOUNTAINEAST) && CheckMirror() && CheckBombs());
             AddLocation("Floodgate", LocationState.ACCESSIBLE, () => CheckOverworldArea(59) && CheckRoom(267));
+            AddLocation("Flute Boy", LocationState.INACCESSIBLE, () => CheckOverworldArea(106), () => CheckAccess(DarkWorldRegion.SOUTH));
             AddLocation("Forest Hideout", LocationState.ACCESSIBLE, 225);
             AddLocation("Graveyard Cliff", LocationState.INACCESSIBLE, () => CheckRoom(283, 6, false), () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckMirror() && CheckBombs());
+            AddLocation("Hammer Cave", LocationState.INACCESSIBLE, 295, () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckFlag("Moon Pearl") && CheckFlag("Hammer") && CheckLevel("Gloves", GlovesLevel.TITAN));
             AddLocation("Haunted Grove", LocationState.INACCESSIBLE, () => CheckFlag("Haunted Grove"), () => (CheckFlag("Flute", FluteLevel.SHOVEL) && !CheckFlag("Flute", FluteLevel.FLUTE)) || CheckFlag("Swappable Inventory 1", SwappableInventory1.SHOVEL));
             AddLocation("Hobo", LocationState.GLITCHACCESSIBLE, () => CheckFlag("Events 2", Events2.HOBO), () => CheckFlag("Flippers"));
+            AddLocation("Hookshot Cave", LocationState.INACCESSIBLE, 60, 4, () => CheckAccess(DeathMountainRegion.DARKEAST) && CheckFlag("Moon Pearl") && CheckFlag("Hookshot"), () => CheckAccess(DeathMountainRegion.DARKEAST) && CheckFlag("Moon Pearl") && CheckFlag("Boots"));
+            AddLocation("Hype Cave", LocationState.INACCESSIBLE, 286, 5, () => CheckAccess(DarkWorldRegion.SOUTH) && CheckBombs());
             AddLocation("Hyrule Castle Dungeon", LocationState.ACCESSIBLE, new List<int> { 113, 114, 128 });
+            AddLocation("Ice Palace", LocationState.INACCESSIBLE, () => false, () => CheckLevel("Gloves", GlovesLevel.TITAN) && CheckFlag("Fire Rod") && CheckFlag("Flippers"), glitchAccessible: () => CheckLevel("Gloves", GlovesLevel.TITAN) && CheckFlag("Fire Rod"));
             AddLocation("Kakariko Well", LocationState.PARTIAL, 47, 5, () => CheckBombs());
             AddLocation("King's Tomb", LocationState.INACCESSIBLE, 275, () => CheckFlag("Boots") && (CheckLevel("Gloves", GlovesLevel.TITAN) || (CheckAccess(DarkWorldRegion.NORTHWEST) && CheckMirror())));
             AddLocation("King Zora", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.KINGZORA), () => (CheckFlag("Flippers") || CheckLevel("Gloves", GlovesLevel.POWER)) && CheckRupees(500), null, () => CheckRupees(500));
@@ -394,13 +406,16 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Lake Hylia Island", LocationState.INACCESSIBLE, () => CheckOverworldArea(53), () => (CheckAccess(DarkWorldRegion.SOUTH) || CheckAccess(DarkWorldRegion.NORTHEAST)) && CheckFlag("Flippers") && CheckMirror());
             AddLocation("Library", LocationState.VISIBLE, () => CheckFlag("Special Items", SpecialItems.LIBRARY), () => CheckFlag("Boots"));
             AddLocation("Link's House", LocationState.ACCESSIBLE, 260);
+            AddLocation("Thieves' Town", LocationState.INACCESSIBLE, () => false, () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckFlag("Hammer"), () => CheckAccess(DarkWorldRegion.NORTHWEST));
             AddLocation("Lost Old Man", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.OLDMAN), () => CheckLevel("Gloves", GlovesLevel.POWER) || CheckFlute(), dark: true);
             AddLocation("Lumberjack's Tree", LocationState.VISIBLE, 226, () => GameLoader.game.Get<Progress>("Progress") == Progress.AGAHNIM);
             AddLocation("Mad Batter", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.MADBATTER), () => CheckFlag("Hammer") && (CheckFlag("Mushroom", MushroomLevel.POWDER) || CheckFlag("Swappable Inventory 1", SwappableInventory1.MAGICPOWDER)));
             AddLocation("Master Sword Pedestal", LocationState.INACCESSIBLE, () => CheckOverworldArea(128), () => CheckFlag("Pendants", Pendants.GREEN | Pendants.BLUE | Pendants.RED));
             AddLocation("Mimic Cave", LocationState.INACCESSIBLE, 268, () => CheckAccess(DarkWorldRegion.DEATHMOUNTAINEAST) && CheckMirror() && CheckFlag("Fire Rod") && CheckFlag("Cane of Somaria"));
-            AddLocation("Moldorm Cave", LocationState.INACCESSIBLE, () => CheckRoom(291, 4) && CheckRoom(291, 7, false), () => CheckBombs());
+            AddLocation("Misery Mire", LocationState.INACCESSIBLE, () => false, visible: () => CheckAccess(DarkWorldRegion.SOUTHWEST)); AddLocation("Moldorm Cave", LocationState.INACCESSIBLE, () => CheckRoom(291, 4) && CheckRoom(291, 7, false), () => CheckBombs());
             AddLocation("Mushroom", LocationState.ACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.MUSHROOM));
+            AddLocation("Palace of Darkness", LocationState.INACCESSIBLE, () => false, () => CheckAccess(DarkWorldRegion.NORTHEAST) && (CheckOverworldArea(94, OverworldState.OVERLAY) || CheckRupees(100)));
+            AddLocation("Pyramid", LocationState.INACCESSIBLE, () => CheckOverworldArea(91), () => CheckAccess(DarkWorldRegion.NORTHEAST));
             AddLocation("Race", LocationState.VISIBLE, () => CheckOverworldArea(40), () => CheckBombs());
             AddLocation("Sahasrahla", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.SAHASRAHLA), () => CheckFlag("Pendants", Pendants.GREEN));
             AddLocation("Sahasrahla's Shrine", LocationState.INACCESSIBLE, 261, 3, () => CheckBombs() || CheckFlag("Boots"));
@@ -410,15 +425,21 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Sewer Escape", LocationState.INACCESSIBLE, 17, 3, () => (CheckLevel("Gloves", GlovesLevel.POWER) || CheckFlag("Lantern")) && (CheckFlag("Boots") || CheckBombs()), () => CheckLevel("Gloves", GlovesLevel.POWER) || CheckFlag("Lantern"));
             AddLocation("Sewer Escape Dark Room", LocationState.DARK, 50);
             AddLocation("Sick Kid", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.SICKKID), ()=> CheckFlag("Bottles"));
+            AddLocation("Skull Woods", LocationState.INACCESSIBLE, () => false, () => CheckAccess(DarkWorldRegion.NORTHWEST) && CheckFlag("Fire Rod"), () => CheckAccess(DarkWorldRegion.NORTHWEST));
             AddLocation("Spectacle Rock", LocationState.INACCESSIBLE, () => CheckOverworldArea(3), () => CheckAccess(DeathMountainRegion.SOUTHWEST) && CheckMirror(), visible: () => CheckAccess(DeathMountainRegion.SOUTHWEST));
             AddLocation("Spectacle Rock Cave", LocationState.INACCESSIBLE, 234, () => CheckLevel("Gloves", GlovesLevel.POWER) || CheckFlute());
+            AddLocation("Spike Cave", LocationState.INACCESSIBLE, 279, () => CheckAccess(DeathMountainRegion.DARKWEST) && CheckFlag("Moon Pearl") && CheckFlag("Hammer"));
             AddLocation("Spiral Cave", LocationState.INACCESSIBLE, 254, () => CheckAccess(DeathMountainRegion.NORTHEAST));
             AddLocation("South of Grove", LocationState.INACCESSIBLE, () => CheckRoom(283, 7, false), () => CheckAccess(DarkWorldRegion.SOUTH) && CheckMirror());
+            AddLocation("Swamp Palace", LocationState.INACCESSIBLE, () => false, () => CheckAccess(DarkWorldRegion.SOUTH) && CheckMirror() && CheckFlag("Flippers"));
             AddLocation("Tavern", LocationState.ACCESSIBLE, 259);
             AddLocation("Thief's Chest", LocationState.INACCESSIBLE, () => CheckFlag("Events 2", Events2.THIEFSCHEST), () => CheckLevel("Gloves", GlovesLevel.TITAN) && CheckFlag("Moon Pearl"));
             AddLocation("Thieves' Hideout", LocationState.PARTIAL, 285, 5, () => CheckBombs());
             AddLocation("Tower of Hera", LocationState.INACCESSIBLE, () => false, () => CheckAccess(DeathMountainRegion.NORTHWEST));
+            AddLocation("Treasure Chest Game", LocationState.INACCESSIBLE, () => CheckRoom(262, 7, false), () => CheckAccess(DarkWorldRegion.NORTHWEST));
+            AddLocation("Turtle Rock", LocationState.INACCESSIBLE, visible: () => CheckAccess(DeathMountainRegion.DARKEAST));
             AddLocation("Waterfall of Wishing", LocationState.INACCESSIBLE, 276, 2, () => CheckFlag("Flippers"), glitchAccessible: () => CheckFlag("Moon Pearl"));
+            AddLocation("West Mire", LocationState.INACCESSIBLE, 269, 2, () => CheckAccess(DarkWorldRegion.SOUTHWEST));
             AddLocation("Witch", LocationState.INACCESSIBLE, () => CheckFlag("Special Items", SpecialItems.WITCH), () => CheckFlag("Mushroom", MushroomLevel.MUSHROOM) || CheckFlag("Swappable Inventory 1", SwappableInventory1.MUSHROOM));
             AddLocation("Zora River Ledge", LocationState.GLITCHVISIBLE, () => CheckOverworldArea(129), () => CheckFlag("Flippers"), visible: () => CheckFlag("Flippers") || CheckLevel("Gloves", GlovesLevel.POWER), glitchVisible: () => true);
         }
