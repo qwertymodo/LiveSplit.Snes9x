@@ -118,12 +118,12 @@ namespace LiveSplit.Snes9x
             DrawImageGrayscale(g, img, (gWidth - iWidth) / 2 + x, (gHeight - iHeight) / 2 - y, iWidth, iHeight, opacity);
         }
 
-        protected virtual void Draw(Graphics g, int width, int height, bool active, float opacity = 0.5f)
+        protected virtual void Draw(Graphics g, float width, float height, bool active, float opacity = 0.5f)
         {
             if(active)
             {
                 if (Centered)
-                    DrawImageFromCenter(g, Frames[0], X, Y, Width, Height, width, height);
+                    DrawImageFromCenter(g, Frames[0], X, Y, Width, Height, (int)width, (int)height);
 
                 else
                     g.DrawImage(Frames[0], X, Y, Width, Height);
@@ -132,7 +132,7 @@ namespace LiveSplit.Snes9x
             else
             {
                 if (Centered)
-                    DrawImageGrayscaleFromCenter(g, Frames[0], X, Y, Width, Height, width, height, opacity);
+                    DrawImageGrayscaleFromCenter(g, Frames[0], X, Y, Width, Height, (int)width, (int)height, opacity);
 
                 else
                     DrawImageGrayscale(g, Frames[0], X, Y, Width, Height, opacity);
