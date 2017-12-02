@@ -275,9 +275,28 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         [Flags]
         public enum Pendants : byte
         {
-            GREEN   = 0x01, // Pendant of Courage
+            RED     = 0x01, // Pendant of Power
             BLUE    = 0x02, // Pendant of Wisdom
-            RED     = 0x04  // Pendant of Power
+            GREEN   = 0x04  // Pendant of Courage
+        }
+
+        [Flags]
+        public enum DungeonItem : ushort
+        {
+            GANONSTOWER     = 0x0004,   // Ganon's Tower
+            TURTLEROCK      = 0x0008,   // Turtle Rock
+            THIEVESTOWN     = 0x0010,   // Thieves' Town
+            TOWEROFHERA     = 0x0020,   // Tower of Hera
+            ICEPALACE       = 0x0040,   // Ice Palace
+            SKULLWOODS      = 0x0080,   // Skull Woods
+            MISERYMIRE      = 0x0100,   // Misery Mire
+            DARKPALACE      = 0x0200,   // Palace of Darkness
+            SWAMPPALACE     = 0x0400,   // Swamp Palace
+            CASTLE2         = 0x0800,   // Hyrule Castle 2 (Tower)
+            DESERTPALACE    = 0x1000,   // Desert Palace
+            EASTERNPALACE   = 0x2000,   // Eastern Palace
+            CASTLE          = 0x4000,   // Hyrule Castle
+            SEWER           = 0x8000    // Hyrule Castle Sewer
         }
 
         [Flags]
@@ -318,6 +337,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         {
             gameName = "THE LEGEND OF ZELDA";
 
+            emulator.RegisterWatcher("Big Key", typeof(DungeonItem), emulator.MemoryType.WRAM, 0xF366);
             emulator.RegisterWatcher("Bombos Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF347);
             emulator.RegisterWatcher("Bombs", typeof(byte), emulator.MemoryType.WRAM, 0xF343);
             emulator.RegisterWatcher("Book of Mudora", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34E);
@@ -331,10 +351,11 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Bow", typeof(BowLevel), emulator.MemoryType.WRAM, 0xF340);
             emulator.RegisterWatcher("Cane of Somaria", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF350);
             emulator.RegisterWatcher("Cane of Byrna", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF351);
+            emulator.RegisterWatcher("Compass", typeof(DungeonItem), emulator.MemoryType.WRAM, 0xF364);
             emulator.RegisterWatcher("Crystals", typeof(Crystals), emulator.MemoryType.WRAM, 0xF37A);
+            emulator.RegisterWatcher("Current Dungeon", typeof(Dungeon), emulator.MemoryType.WRAM, 0x040C);
             emulator.RegisterWatcher("Current Room Items", typeof(CurrentRoomState), emulator.MemoryType.WRAM, 0x0403);
             emulator.RegisterWatcher("Current Room Number", typeof(ushort), emulator.MemoryType.WRAM, 0x00A0);
-            emulator.RegisterWatcher("Dungeon", typeof(Dungeon), emulator.MemoryType.WRAM, 0x040C);
             emulator.RegisterWatcher("Ether Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF348);
             emulator.RegisterWatcher("Events 1", typeof(Events1), emulator.MemoryType.WRAM, 0xF3C6);
             emulator.RegisterWatcher("Events 2", typeof(Events2), emulator.MemoryType.WRAM, 0xF3C9);
@@ -351,6 +372,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Magic Cape", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF352);
             emulator.RegisterWatcher("Magic Mirror", typeof(MirrorLevel), emulator.MemoryType.WRAM, 0xF353);
             emulator.RegisterWatcher("Main Module", typeof(GameModule), emulator.MemoryType.WRAM, 0x0010);
+            emulator.RegisterWatcher("Map", typeof(DungeonItem), emulator.MemoryType.WRAM, 0xF368);
             emulator.RegisterWatcher("Moon Pearl", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF357);
             emulator.RegisterWatcher("Mushroom", typeof(MushroomLevel), emulator.MemoryType.WRAM, 0xF344);
             emulator.RegisterWatcher("Net", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF34D);
@@ -489,7 +511,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                 if (newCrystal != Crystals.NONE)
                 {
                     state.CurrentSplit.Icon = icons["Crystal"][index % 7];
-                    switch (Get<Dungeon>("Dungeon"))
+                    switch (Get<Dungeon>("Current Dungeon"))
                     {
                         case Dungeon.DARKPALACE:
                             state.CurrentSplit.Name = "Palace of Darkness";
@@ -524,7 +546,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                             break;
 
                         default:
-                            state.CurrentSplit.Name = Get<Dungeon>("Dungeon").ToString();
+                            state.CurrentSplit.Name = Get<Dungeon>("Current Dungeon").ToString();
                             break;
                     }
 

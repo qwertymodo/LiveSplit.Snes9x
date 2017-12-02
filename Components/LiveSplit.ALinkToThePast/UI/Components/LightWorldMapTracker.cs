@@ -13,6 +13,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public LightWorldMapTracker()
         {
+            icons = new Images();
+
             AddLocation("Aginah's Cave", 92, 412);
             AddLocation("Blacksmiths", 148, 264);
             AddLocation("Bombos Tablet", 96, 460);
@@ -41,12 +43,12 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Library", 72, 328);
             AddLocation("Link's House", 272, 340);
             AddLocation("Lost Old Man", 200, 88);
+            AddLocation("Lost Woods", 56, 40);
             AddLocation("Lumberjack's Tree", 144, 32);
             AddLocation("Mad Batter", 156, 280);
             AddLocation("Master Sword Pedestal", 8, 8);
             AddLocation("Mimic Cave", 424, 40);
             AddLocation("Moldorm Cave", 324, 472);
-            AddLocation("Mushroom", 56, 40);
             AddLocation("Race", 8, 344);
             AddLocation("Sahasrahla", 408, 228, 16, 8);
             AddLocation("Sahasrahla's Shrine", 408, 220, 16, 8);
@@ -67,6 +69,10 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Waterfall of Wishing", 448, 64);
             AddLocation("Witch", 400, 160);
             AddLocation("Zora River Ledge", 472, 56);
+
+            AddLocation("Armos Knights", 482, 196);
+            AddLocation("Lanmolas", 29, 396);
+            AddLocation("Moldorm", 278, 8);
         }
     }
 }
