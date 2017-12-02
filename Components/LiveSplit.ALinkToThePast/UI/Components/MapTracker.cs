@@ -28,8 +28,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                 { LocationState.DARK, Color.Blue },
                 { LocationState.COMPLETE, Color.Gray },
                 { LocationState.GLITCHACCESSIBLE, Color.Green },
-                { LocationState.GLITCHVISIBLE, Color.Gold },
-                { LocationState.UNKNOWN, Color.Empty }
+                { LocationState.GLITCHVISIBLE, Color.DarkKhaki },
+                { LocationState.UNKNOWN, Color.Orange }
             };
             protected virtual LocationWatcher locations => new LocationWatcher();
 
@@ -47,18 +47,23 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             {
                 LocationState locationState = updateFunc();
 
-                if ((GameLoader.game?.IsLoaded() ?? false) && (!GameLoader.game?.IsRaceROM() ?? false) && locationState != LocationState.COMPLETE)
+                if ((GameLoader.game?.IsLoaded() ?? false) && !(GameLoader.game?.IsRaceROM() ?? false) && locationState != LocationState.COMPLETE)
                 {
                     Rectangle location = new Rectangle(X, Y, Width, Height);
                     g.FillRectangle(new SolidBrush(LocationColor[updateFunc()]), location);
                     g.DrawRectangle(new Pen(Color.Black, 2), location);
                 }
+
+                if (Frames != null)
+                    Draw(g, width, height, locationState != LocationState.COMPLETE);
             }
         }
 
         protected void AddLocation(string name, int x, int y, int width = 16, int height = 16)
         {
-            items.Add(name, new LocationImageWatcher(name, null, x + 1, y + 1, false, width, height));
+            List<Image> images;
+            icons.TryGetValue(name, out images);
+            items.Add(name, new LocationImageWatcher(name, images, x + 1, y + 1, false, width, height));
         }
 
         protected override void DrawGeneral(Graphics g, LiveSplitState state, float width, float height, LayoutMode mode)
