@@ -33,13 +33,13 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             AddLocation("Turtle Rock", 469, 20, 24, 24);
             AddLocation("West Mire", 12, 396);
 
-            AddLocation("Arrghus", 29, 416);
+            AddLocation("Arrghus", 231, 468);
             AddLocation("Blind", 56, 236);
             AddLocation("Kholdstare", 399, 432);
             AddLocation("King Helmasaur", 482, 196);
             AddLocation("Mothula", 10, 20);
             AddLocation("Trinexx", 473, 24);
-            AddLocation("Vitreous", 231, 468);
+            AddLocation("Vitreous", 29, 416);
         }
     }
 }

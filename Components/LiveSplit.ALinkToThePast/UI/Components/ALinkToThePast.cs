@@ -35,7 +35,6 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         {
             HOBO        = 0x01, // Received the hobo's bottle
             MERCHANT    = 0x02, // Received the merchant's bottle
-            FLUTEBOY    = 0x08, // Spoke to flute boy (DW)
             THIEFSCHEST = 0x10, // Purple chest has been opened
             BLACKSMITH  = 0x20, // Returned the frog to his partner
             FORGING     = 0x80  // The blacksmiths currently have your sword
@@ -47,7 +46,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             OLDMAN          = 0x0001, // Received the mirror from the lost old man
             KINGZORA        = 0x0002, // Received the flippers from King Zora
             SICKKID         = 0x0004, // Received the bug net from the sick kid
-            SAHASRAHLA      = 0x0010, // Recieved the boots from Sahasrahla
+            FLUTEBOY        = 0x0008, // Received the flute from the boy in the Dark World Haunted Grove
+            SAHASRAHLA      = 0x0010, // Received the boots from Sahasrahla
+            CATFISH         = 0x0020, // Received the medallion from the catfish
             LIBRARY         = 0x0080, // Collected the book from the library
             ETHER           = 0x0100, // Received the ether medallion
             BOMBOS          = 0x0200, // Received the bombos medallion
