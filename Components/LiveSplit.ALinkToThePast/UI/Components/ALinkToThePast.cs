@@ -333,6 +333,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         }
 
         bool running = false;
+        ImageDict icons = new Images();
 
         public ALinkToThePast()
         {
@@ -466,9 +467,6 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
             if (IsRunning())
             {
-
-                Images icons = new Images();
-
                 if (state.CurrentPhase == TimerPhase.NotRunning)
                 {
                     if(randomized)
