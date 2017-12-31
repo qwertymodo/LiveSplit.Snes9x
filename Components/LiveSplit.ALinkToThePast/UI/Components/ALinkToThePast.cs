@@ -334,6 +334,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         bool running = false;
         ImageDict icons = new Images();
+        ALinkToThePastSettings settings = new ALinkToThePastSettings();
 
         public ALinkToThePast()
         {
@@ -465,7 +466,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         {
             base.Update(state);
 
-            if (IsRunning())
+            if (IsRunning() && settings.AutoSplitter)
             {
                 if (state.CurrentPhase == TimerPhase.NotRunning)
                 {

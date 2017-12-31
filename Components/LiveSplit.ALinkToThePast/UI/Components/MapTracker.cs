@@ -35,6 +35,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
             protected Func<LocationState> updateFunc;
 
+            protected ALinkToThePastSettings settings => new ALinkToThePastSettings();
+
             public LocationImageWatcher(string name, List<Image> frames, int x, int y, bool center, int width, int height)
                 : base(name, frames, x, y, center, width, height)
             {
@@ -47,7 +49,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             {
                 LocationState locationState = updateFunc();
 
-                if ((GameLoader.game?.IsLoaded() ?? false) && !(GameLoader.game?.IsRaceROM() ?? false) && locationState != LocationState.COMPLETE)
+                if ((GameLoader.game?.IsLoaded() ?? false) && !(GameLoader.game?.IsRaceROM() ?? false) && (settings.ShowCompleted || locationState != LocationState.COMPLETE))
                 {
                     Rectangle location = new Rectangle(X, Y, Width, Height);
                     g.FillRectangle(new SolidBrush(LocationColor[updateFunc()]), location);

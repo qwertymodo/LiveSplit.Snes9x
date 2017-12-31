@@ -16,6 +16,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
     {
         public bool MapTracker { get; set; }
         public bool ItemTracker { get; set; }
+        public bool ShowCompleted { get; set; }
+        public bool AutoSplitter { get; set; }
 
         public LayoutMode Mode { get; set; }
 
@@ -25,9 +27,13 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
             MapTracker = true;
             ItemTracker = true;
+            ShowCompleted = true;
+            AutoSplitter = true;
 
             cbMapTracker.DataBindings.Add("Checked", this, "MapTracker", false, DataSourceUpdateMode.OnPropertyChanged);
             cbItemTracker.DataBindings.Add("Checked", this, "ItemTracker", false, DataSourceUpdateMode.OnPropertyChanged);
+            cbShowCompleted.DataBindings.Add("Checked", this, "ShowCompleted", false, DataSourceUpdateMode.OnPropertyChanged);
+            cbAutoSplitter.DataBindings.Add("Checked", this, "AutoSplitter", false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void ALinkToThePastSettings_Load(object sender, EventArgs e)
@@ -70,6 +76,16 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         private void cbItemTracker_CheckedChanged(object sender, EventArgs e)
         {
             ItemTracker = cbItemTracker.Checked;
+        }
+
+        private void cbShowCompleted_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowCompleted = cbShowCompleted.Checked;
+        }
+
+        private void cbAutoSplitter_CheckedChanged(object sender, EventArgs e)
+        {
+            AutoSplitter = cbAutoSplitter.Checked;
         }
     }
 }

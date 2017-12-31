@@ -31,6 +31,8 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbMapTracker = new System.Windows.Forms.CheckBox();
             this.cbItemTracker = new System.Windows.Forms.CheckBox();
+            this.cbShowCompleted = new System.Windows.Forms.CheckBox();
+            this.cbAutoSplitter = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,6 +43,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.cbMapTracker, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.cbItemTracker, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cbShowCompleted, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cbAutoSplitter, 1, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -71,6 +75,28 @@
             this.cbItemTracker.UseVisualStyleBackColor = true;
             this.cbItemTracker.CheckedChanged += new System.EventHandler(this.cbItemTracker_CheckedChanged);
             // 
+            // cbShowCompleted
+            // 
+            this.cbShowCompleted.AutoSize = true;
+            this.cbShowCompleted.Location = new System.Drawing.Point(3, 36);
+            this.cbShowCompleted.Name = "cbShowCompleted";
+            this.cbShowCompleted.Size = new System.Drawing.Size(155, 17);
+            this.cbShowCompleted.TabIndex = 2;
+            this.cbShowCompleted.Text = "Show Completed Locations";
+            this.cbShowCompleted.UseVisualStyleBackColor = true;
+            this.cbShowCompleted.CheckedChanged += new System.EventHandler(this.cbShowCompleted_CheckedChanged);
+            // 
+            // cbAutoSplitter
+            // 
+            this.cbAutoSplitter.AutoSize = true;
+            this.cbAutoSplitter.Location = new System.Drawing.Point(238, 36);
+            this.cbAutoSplitter.Name = "cbAutoSplitter";
+            this.cbAutoSplitter.Size = new System.Drawing.Size(83, 17);
+            this.cbAutoSplitter.TabIndex = 3;
+            this.cbAutoSplitter.Text = "Auto Splitter";
+            this.cbAutoSplitter.UseVisualStyleBackColor = true;
+            this.cbAutoSplitter.CheckedChanged += new System.EventHandler(this.cbAutoSplitter_CheckedChanged);
+            // 
             // ALinkToThePastSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -90,5 +116,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.CheckBox cbMapTracker;
         private System.Windows.Forms.CheckBox cbItemTracker;
+        private System.Windows.Forms.CheckBox cbShowCompleted;
+        private System.Windows.Forms.CheckBox cbAutoSplitter;
     }
 }
