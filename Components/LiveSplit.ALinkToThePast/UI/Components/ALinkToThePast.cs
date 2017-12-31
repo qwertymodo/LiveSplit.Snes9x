@@ -506,16 +506,50 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
                 Crystals newCrystal = (Crystals)((byte)Get<Crystals>("Crystals") - (byte)Previous<Crystals>("Crystals"));
 
-                byte index;
-                for (index = 0; index < 8 && !newCrystal.HasFlag((Crystals)(1 << index)); ++index) ;
-
                 if (newCrystal != Crystals.NONE)
                 {
-                    state.CurrentSplit.Icon = icons["Crystal"][index % 7];
+                    switch (newCrystal)
+                    {
+                        case Crystals.CRYSTAL1:
+                            state.CurrentSplit.Icon = icons["Crystal"][1];
+                            break;
+
+                        case Crystals.CRYSTAL2:
+                            state.CurrentSplit.Icon = icons["Crystal"][2];
+                            break;
+
+                        case Crystals.CRYSTAL3:
+                            state.CurrentSplit.Icon = icons["Crystal"][3];
+                            break;
+
+                        case Crystals.CRYSTAL4:
+                            state.CurrentSplit.Icon = icons["Crystal"][4];
+                            break;
+
+                        case Crystals.CRYSTAL5:
+                            state.CurrentSplit.Icon = icons["Crystal"][5];
+                            break;
+
+                        case Crystals.CRYSTAL6:
+                            state.CurrentSplit.Icon = icons["Crystal"][6];
+                            break;
+
+                        case Crystals.CRYSTAL7:
+                            state.CurrentSplit.Icon = icons["Crystal"][7];
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
                     switch (Get<Dungeon>("Current Dungeon"))
                     {
                         case Dungeon.DARKPALACE:
                             state.CurrentSplit.Name = "Palace of Darkness";
+                            break;
+
+                        case Dungeon.DESERTPALACE:
+                            state.CurrentSplit.Name = "Desert Palace";
                             break;
 
                         case Dungeon.EASTERNPALACE:
@@ -540,6 +574,10 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
                         case Dungeon.THIEVESTOWN:
                             state.CurrentSplit.Name = "Thieves' Town";
+                            break;
+
+                        case Dungeon.TOWEROFHERA:
+                            state.CurrentSplit.Name = "Tower of Hera";
                             break;
 
                         case Dungeon.TURTLEROCK:
