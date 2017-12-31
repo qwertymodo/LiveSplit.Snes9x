@@ -383,6 +383,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Player State", typeof(PlayerState), emulator.MemoryType.WRAM, 0x005D);
             emulator.RegisterWatcher("Progress", typeof(Progress), emulator.MemoryType.WRAM, 0xF3C5);
             emulator.RegisterWatcher("Quake Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF349);
+            emulator.RegisterWatcher("Room ID", typeof(ushort), emulator.MemoryType.WRAM, 0x00A0);
             emulator.RegisterWatcher("Rupees", typeof(ushort), emulator.MemoryType.WRAM, 0xF362);
             emulator.RegisterWatcher("Shield", typeof(ShieldLevel), emulator.MemoryType.WRAM, 0xF35A);
             emulator.RegisterWatcher("Special Items", typeof(SpecialItems), emulator.MemoryType.WRAM, 0xF410);
@@ -553,6 +554,11 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                     if (state.CurrentSplitIndex == state.Run.Count)
                         state.Run.AddSegment("Crystal " + state.CurrentSplitIndex + 2, icon: icons["Crystal"][0]);
 
+                    timer.Split();
+                }
+
+                if (Get<ushort>("RoomID") == 0x0189)
+                {
                     timer.Split();
                 }
             }
