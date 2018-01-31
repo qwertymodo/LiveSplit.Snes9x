@@ -384,8 +384,10 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Rupees", typeof(ushort), emulator.MemoryType.WRAM, 0xF362);
             emulator.RegisterWatcher("Shield", typeof(ShieldLevel), emulator.MemoryType.WRAM, 0xF35A);
             emulator.RegisterWatcher("Special Items", typeof(SpecialItems), emulator.MemoryType.WRAM, 0xF410);
-            emulator.RegisterWatcher("Swappable Inventory 1", typeof(SwappableInventory1), emulator.MemoryType.WRAM, 0xF412);
-            emulator.RegisterWatcher("Swappable Inventory 2", typeof(SwappableInventory2), emulator.MemoryType.WRAM, 0xF414);
+            //emulator.RegisterWatcher("Swappable Inventory 1", typeof(SwappableInventory1), emulator.MemoryType.WRAM, 0xF412);   // v8.27
+            //emulator.RegisterWatcher("Swappable Inventory 2", typeof(SwappableInventory2), emulator.MemoryType.WRAM, 0xF414);   // v8.27
+            emulator.RegisterWatcher("Swappable Inventory 1", typeof(SwappableInventory1), emulator.MemoryType.WRAM, 0xF38C);   // v8.28
+            emulator.RegisterWatcher("Swappable Inventory 2", typeof(SwappableInventory2), emulator.MemoryType.WRAM, 0xF38E);   // v8.28
             emulator.RegisterWatcher("Sword", typeof(SwordLevel), emulator.MemoryType.WRAM, 0xF359);
             emulator.RegisterWatcher("Tunic", typeof(ArmorLevel), emulator.MemoryType.WRAM, 0xF35B);
             
