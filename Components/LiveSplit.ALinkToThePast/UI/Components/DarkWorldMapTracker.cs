@@ -8,6 +8,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public DarkWorldMapTracker()
         {
+            HorizontalWidth = MinimumWidth;
+            VerticalHeight = MinimumHeight;
+
             icons = new Images();
 
             AddLocation("Bomb Hut", 48, 288);

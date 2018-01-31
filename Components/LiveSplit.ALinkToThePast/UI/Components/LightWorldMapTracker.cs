@@ -13,6 +13,9 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
         public LightWorldMapTracker()
         {
+            HorizontalWidth = MinimumWidth;
+            VerticalHeight = MinimumHeight;
+
             icons = new Images();
 
             AddLocation("Aginah's Cave", 92, 412);
