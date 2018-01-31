@@ -333,6 +333,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         }
 
         bool running = false;
+        ImageDict icons = new Images();
+        ALinkToThePastSettings settings = new ALinkToThePastSettings();
 
         public ALinkToThePast()
         {
@@ -381,6 +383,7 @@ namespace LiveSplit.ALinkToThePast.UI.Components
             emulator.RegisterWatcher("Player State", typeof(PlayerState), emulator.MemoryType.WRAM, 0x005D);
             emulator.RegisterWatcher("Progress", typeof(Progress), emulator.MemoryType.WRAM, 0xF3C5);
             emulator.RegisterWatcher("Quake Medallion", typeof(BoolFlag), emulator.MemoryType.WRAM, 0xF349);
+            emulator.RegisterWatcher("Room ID", typeof(ushort), emulator.MemoryType.WRAM, 0x00A0);
             emulator.RegisterWatcher("Rupees", typeof(ushort), emulator.MemoryType.WRAM, 0xF362);
             emulator.RegisterWatcher("Shield", typeof(ShieldLevel), emulator.MemoryType.WRAM, 0xF35A);
             emulator.RegisterWatcher("Special Items", typeof(SpecialItems), emulator.MemoryType.WRAM, 0xF410);
@@ -466,11 +469,8 @@ namespace LiveSplit.ALinkToThePast.UI.Components
         {
             base.Update(state);
 
-            if (IsRunning())
+            if (IsRunning() && settings.AutoSplitter)
             {
-
-                Images icons = new Images();
-
                 if (state.CurrentPhase == TimerPhase.NotRunning)
                 {
                     if(randomized)
@@ -508,16 +508,50 @@ namespace LiveSplit.ALinkToThePast.UI.Components
 
                 Crystals newCrystal = (Crystals)((byte)Get<Crystals>("Crystals") - (byte)Previous<Crystals>("Crystals"));
 
-                byte index;
-                for (index = 0; index < 8 && !newCrystal.HasFlag((Crystals)(1 << index)); ++index) ;
-
                 if (newCrystal != Crystals.NONE)
                 {
-                    state.CurrentSplit.Icon = icons["Crystal"][index % 7];
+                    switch (newCrystal)
+                    {
+                        case Crystals.CRYSTAL1:
+                            state.CurrentSplit.Icon = icons["Crystal"][1];
+                            break;
+
+                        case Crystals.CRYSTAL2:
+                            state.CurrentSplit.Icon = icons["Crystal"][2];
+                            break;
+
+                        case Crystals.CRYSTAL3:
+                            state.CurrentSplit.Icon = icons["Crystal"][3];
+                            break;
+
+                        case Crystals.CRYSTAL4:
+                            state.CurrentSplit.Icon = icons["Crystal"][4];
+                            break;
+
+                        case Crystals.CRYSTAL5:
+                            state.CurrentSplit.Icon = icons["Crystal"][5];
+                            break;
+
+                        case Crystals.CRYSTAL6:
+                            state.CurrentSplit.Icon = icons["Crystal"][6];
+                            break;
+
+                        case Crystals.CRYSTAL7:
+                            state.CurrentSplit.Icon = icons["Crystal"][7];
+                            break;
+
+                        default:
+                            break;
+                    }
+                    
                     switch (Get<Dungeon>("Current Dungeon"))
                     {
                         case Dungeon.DARKPALACE:
                             state.CurrentSplit.Name = "Palace of Darkness";
+                            break;
+
+                        case Dungeon.DESERTPALACE:
+                            state.CurrentSplit.Name = "Desert Palace";
                             break;
 
                         case Dungeon.EASTERNPALACE:
@@ -544,6 +578,10 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                             state.CurrentSplit.Name = "Thieves' Town";
                             break;
 
+                        case Dungeon.TOWEROFHERA:
+                            state.CurrentSplit.Name = "Tower of Hera";
+                            break;
+
                         case Dungeon.TURTLEROCK:
                             state.CurrentSplit.Name = "Turtle Rock";
                             break;
@@ -556,6 +594,11 @@ namespace LiveSplit.ALinkToThePast.UI.Components
                     if (state.CurrentSplitIndex == state.Run.Count)
                         state.Run.AddSegment("Crystal " + state.CurrentSplitIndex + 2, icon: icons["Crystal"][0]);
 
+                    timer.Split();
+                }
+
+                if (Get<ushort>("RoomID") == 0x0189)
+                {
                     timer.Split();
                 }
             }
